@@ -1,0 +1,2 @@
+set -x PATH ~/dev/bin $PATH
+set -x PATH ~/.local/bin $PATH

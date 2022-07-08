@@ -1,0 +1,1 @@
+/home/ryo/.vimrc
