@@ -1,11 +1,4 @@
 " ----------------------------------------------------------------------------
-"  python setting
-" ----------------------------------------------------------------------------
-if !exists('python3_host_prog')
-    let g:python3_host_prog = expand('~/AppData/Local/Programs/Python/Python310/python.exe')
-endif
-
-" ----------------------------------------------------------------------------
 "  dein setting
 " ----------------------------------------------------------------------------
 let s:dein_dir = expand('~/.cache/dein')
@@ -175,4 +168,11 @@ if system('uname -a | grep -i Microsoft') != ''
         au!
         au TextYankPost * :call system('clip.exe', @")
     augroup END
+endif
+
+" ----------------------------------------------------------------------------
+"  python setting
+" ----------------------------------------------------------------------------
+if has('windows')
+    let g:python3_host_prog = expand('~/AppData/Local/Programs/Python/Python310/python.exe')
 endif
