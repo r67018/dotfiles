@@ -78,6 +78,8 @@ if has('nvim')
     tnoremap <silent><Esc> <C-\><C-n>
 endif
 
+autocmd TermOpen * setlocal nonumber norelativenumber
+
 " ----------------------------------------------------------------------------
 "  Utility
 " ----------------------------------------------------------------------------
