@@ -66,10 +66,10 @@ inoremap <C-t> <Esc><Left>"zx"zpa
 "  Terminal
 " ----------------------------------------------------------------------------
 if has('nvim')
-    " :T でターミナルを開く(水平)
-    command! -nargs=* T split | wincmd j | resize 15 | terminal /bin/fish <args>
     " :Tv でターミナルを開く(垂直)
-    command! -nargs=* Tv vsplit | wincmd j | terminal /bin/fish <args>
+    command! -nargs=* T vsplit | wincmd j | terminal /bin/fish <args>
+    " :T でターミナルを開く(水平)
+    command! -nargs=* Th split | wincmd j | resize 15 | terminal /bin/fish <args>
     " インサートモードでターミナルを開く
     autocmd TermOpen * startinsert
     " @t で新しいタブでターミナルを開く
@@ -77,7 +77,6 @@ if has('nvim')
     " ノーマルモードへESCで移行
     tnoremap <silent><Esc> <C-\><C-n>
 endif
-
 
 " ----------------------------------------------------------------------------
 "  Utility
