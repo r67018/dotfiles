@@ -41,6 +41,9 @@ endif
 " ----------------------------------------------------------------------------
 let mapleader = "\<Space>"
 
+" replace key
+inoremap <C-]> <Right>
+
 " do not use register
 nnoremap x "_x
 nnoremap s "_s
