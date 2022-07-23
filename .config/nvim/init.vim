@@ -135,9 +135,9 @@ set autoindent                 " 新しい行のインデントを現在の行�
 "  Plugins
 " ----------------------------------------------------------------------------
 " ctags
-set tags=./.tags;$HOME
-nnoremap <C-]> g<C-]>
-inoremap <C-]> <Esc>g<C-]>
+" s:et tags=./.tags;$HOME
+" nnoremap <C-]> g<C-]>
+" inoremap <C-]> <Esc>g<C-]>
 " easymotion
 map  <Leader>s <Plug>(easymotion-bd-f2)
 nmap <Leader>s <Plug>(easymotion-overwin-f2)
