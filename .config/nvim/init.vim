@@ -36,6 +36,9 @@ endif
 " ----------------------------------------------------------------------------
 let mapleader = "\<Space>"
 
+" replace key
+inoremap <C-]> <Right>
+
 " do not use register
 nnoremap x "_x
 nnoremap s "_s
@@ -61,10 +64,10 @@ inoremap <C-t> <Esc><Left>"zx"zpa
 "  Terminal
 " ----------------------------------------------------------------------------
 if has('nvim')
-    " :T でターミナルを開く(水平)
-    command! -nargs=* T split | wincmd j | resize 15 | terminal /bin/fish <args>
     " :Tv でターミナルを開く(垂直)
-    command! -nargs=* Tv vsplit | wincmd j | terminal /bin/fish <args>
+    command! -nargs=* T vsplit | wincmd j | terminal /bin/fish <args>
+    " :T でターミナルを開く(水平)
+    command! -nargs=* Th split | wincmd j | resize 15 | terminal /bin/fish <args>
     " インサートモードでターミナルを開く
     autocmd TermOpen * startinsert
     " @t で新しいタブでターミナルを開く
@@ -73,6 +76,7 @@ if has('nvim')
     tnoremap <silent><Esc> <C-\><C-n>
 endif
 
+autocmd TermOpen * setlocal nonumber norelativenumber
 
 " ----------------------------------------------------------------------------
 "  Utility
@@ -129,9 +133,9 @@ set autoindent                 " 新しい行のインデントを現在の行�
 "  Plugins
 " ----------------------------------------------------------------------------
 " ctags
-set tags=./.tags;$HOME
-nnoremap <C-]> g<C-]>
-inoremap <C-]> <Esc>g<C-]>
+" s:et tags=./.tags;$HOME
+" nnoremap <C-]> g<C-]>
+" inoremap <C-]> <Esc>g<C-]>
 " easymotion
 map  <Leader>s <Plug>(easymotion-bd-f2)
 nmap <Leader>s <Plug>(easymotion-overwin-f2)
