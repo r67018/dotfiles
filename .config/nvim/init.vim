@@ -1,3 +1,5 @@
+let g:nvim_config_dir = expand('~/dotfiles/.config/nvim/')
+
 " ----------------------------------------------------------------------------
 "  dein setting
 " ----------------------------------------------------------------------------
@@ -14,7 +16,7 @@ endif
 if dein#load_state(s:dein_dir)
     call dein#begin(s:dein_dir)
 
-    let g:rc_dir = expand('%:p:h') . '/rc/'
+    let g:rc_dir = g:nvim_config_dir . 'rc/'
     let s:toml      = g:rc_dir . 'dein.toml'
 
     let s:lazy_toml = g:rc_dir . 'dein_lazy.toml'

@@ -18,7 +18,6 @@ hook_add = '''
 [[plugins]]
 repo = 'vim-airline/vim-airline-themes'
 
-
 ### utility
 [[plugins]]
 repo = 'easymotion/vim-easymotion'
