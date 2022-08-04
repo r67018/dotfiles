@@ -146,9 +146,6 @@ map  <Leader>s <Plug>(easymotion-bd-f2)
 nmap <Leader>s <Plug>(easymotion-overwin-f2)
 map  <Leader>l <Plug>(easymotion-bd-jk)
 nmap <Leader>l <Plug>(easymotion-overwin-line)
-" easy-align
-xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
 " deoplete
 " autocmd VimEnter * inoremap <expr><CR> ((pumvisible()) ? (deoplete#close_popup() "\<CR>" sleep 1 "\<CR>") : "\<CR>")
 " inoremap <expr><CR> ((pumvisible()) ? (deoplete#close_popup() "\<CR>" "\<CR>") : "\<CR>")
