@@ -72,6 +72,12 @@ set FZF_CTRL_T_OPTS '--preview "bat --color=always --style=header,grid --line-ra
 #     end
 # end
 
+### activate systemd ###
+# if not ps -aux | grep systemd | grep -v grep
+#     sudo daemonize /usr/bin/unshare --fork --pid --mount-proc /lib/systemd/systemd --system-unit=basic.target
+#     exec nsenter --target (pidof systemd) --all su - $LOGNAME
+# end
+
 ### execute tmux ###
 # execute only first shell
 if [ $SHLVL -eq 1 ]
