@@ -178,6 +178,6 @@ augroup END
 if system('uname -a | grep -i Microsoft') != ''
     augroup windows_yank
         au!
-        au TextYankPost * :call system('clip.exe', @")
+        au TextYankPost * :call system('clip', @")
     augroup END
 endif
