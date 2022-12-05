@@ -128,7 +128,7 @@ set ruler                      " カーソルの位置表示
 set whichwrap=b,s,h,l,[,],<,>,~      " カーソルの回り込み有効化
 set cursorline " 現在の行をハイライト
 highlight CursorLine guifg=NONE guibg=NONE
-set guicursor= " Disable cursor changing
+set guicursor=i:block " Disable cursor changing
 
 " tab setting
 set expandtab                  " tabを複数のspaceに置き換え
