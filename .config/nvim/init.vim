@@ -58,6 +58,9 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
+" buffer
+nnoremap <silent> <A-[> :bprev<CR>
+nnoremap <silent> <A-]> :bnext<CR>
 
 " macros
 nnoremap <silent> <Esc><Esc> :<C-u>nohlsearch<CR>
