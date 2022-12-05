@@ -128,6 +128,7 @@ set ruler                      " カーソルの位置表示
 set whichwrap=b,s,h,l,[,],<,>,~      " カーソルの回り込み有効化
 set cursorline " 現在の行をハイライト
 highlight CursorLine guifg=NONE guibg=NONE
+set guicursor= " Disable cursor changing
 
 " tab setting
 set expandtab                  " tabを複数のspaceに置き換え
@@ -159,12 +160,12 @@ nmap <Leader>l <Plug>(easymotion-overwin-line)
 "  Others
 " ----------------------------------------------------------------------------
 " change shape of cursor
-if has('vim_starting')
-    " Insert mode
-    let &t_SI .="\e[6 q"
-    " Normal mode
-    let &t_EI .= "\e[2 q"
-endif
+" if has('vim_starting')
+"     " Insert mode
+"     let &t_SI .="\e[6 q" " steady bar
+"     " Normal mode
+"     let &t_EI .= "\e[2 q" " steady block
+" endif
 
 " load .vimrc automatically
 augroup vimrc_loading
