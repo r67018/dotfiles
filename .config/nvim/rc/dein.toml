@@ -55,12 +55,12 @@ hook_add = '''
     let g:python_host_prog = '/bin/python3'
     let g:python3_host_prog = '/bin/python3'
 
-    call deoplete#custom#option('auto_complete_delay', 150)
+    call deoplete#custom#option('auto_complete_delay', 0)
     call deoplete#custom#option('auto_refresh_delay', 10)
     call deoplete#custom#option('ignore_case', v:true)
     call deoplete#custom#option('smart_case', v:true)
     call deoplete#custom#option('max_list', 50)
-    call deoplete#custom#option('min_pattern_length', 1)
+    call deoplete#custom#option('min_pattern_length', 2)
 '''
 
 [[plugins]]
