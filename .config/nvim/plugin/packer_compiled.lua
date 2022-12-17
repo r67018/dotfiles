@@ -181,6 +181,12 @@ _G.packer_plugins = {
     path = "/home/ryo/.local/share/nvim/site/pack/packer/start/nvim-tree.lua",
     url = "https://github.com/nvim-tree/nvim-tree.lua"
   },
+  ["nvim-treesitter"] = {
+    config = { "require('config.treesitter')" },
+    loaded = true,
+    path = "/home/ryo/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
+    url = "https://github.com/nvim-treesitter/nvim-treesitter"
+  },
   ["nvim-web-devicons"] = {
     loaded = true,
     path = "/home/ryo/.local/share/nvim/site/pack/packer/start/nvim-web-devicons",
@@ -298,6 +304,10 @@ time([[Setup for telescope.nvim]], false)
 time([[Config for hop.nvim]], true)
 require('config.hop')
 time([[Config for hop.nvim]], false)
+-- Config for: nvim-treesitter
+time([[Config for nvim-treesitter]], true)
+require('config.treesitter')
+time([[Config for nvim-treesitter]], false)
 -- Config for: nvim-tree.lua
 time([[Config for nvim-tree.lua]], true)
 require('config.tree')
@@ -319,7 +329,7 @@ vim.cmd [[au!]]
   -- Event lazy-loads
 time([[Defining lazy-load event autocommands]], true)
 vim.cmd [[au InsertEnter * ++once lua require("packer.load")({'nvim-autopairs', 'LuaSnip'}, { event = "InsertEnter *" }, _G.packer_plugins)]]
-vim.cmd [[au VimEnter * ++once lua require("packer.load")({'nvim-cmp', 'vim-easy-align', 'trouble.nvim', 'nvim-surround', 'Comment.nvim'}, { event = "VimEnter *" }, _G.packer_plugins)]]
+vim.cmd [[au VimEnter * ++once lua require("packer.load")({'nvim-cmp', 'vim-easy-align', 'trouble.nvim', 'Comment.nvim', 'nvim-surround'}, { event = "VimEnter *" }, _G.packer_plugins)]]
 vim.cmd [[au BufWrite * ++once lua require("packer.load")({'trim.nvim'}, { event = "BufWrite *" }, _G.packer_plugins)]]
 time([[Defining lazy-load event autocommands]], false)
 vim.cmd("augroup END")

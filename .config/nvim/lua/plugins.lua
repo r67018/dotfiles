@@ -47,6 +47,12 @@ return packer.startup(function(use)
     use 'vim-airline/vim-airline' -- awesome status bar
     use 'vim-airline/vim-airline-themes' -- status bar themes
 
+    use {
+        'nvim-treesitter/nvim-treesitter',
+        run = ':TSUpdate',
+        config = [[require('config.treesitter')]],
+    }
+
     -- utility --
     -- pair off parentheses
     use {
