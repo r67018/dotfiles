@@ -8,3 +8,5 @@ set('n', '<leader>fb', '<cmd>Telescope buffers<cr>', opts)
 set('n', '<leader>fc', '<cmd>Telescope commands<cr>', opts)
 set('n', '<leader>fh', '<cmd>Telescope help_tags<cr>', opts)
 
+set('c', '<c-p>', '<cmd>Telescope command_history<cr>', opts)
+
