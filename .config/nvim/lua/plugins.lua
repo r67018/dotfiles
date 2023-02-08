@@ -163,6 +163,14 @@ return packer.startup(function(use)
     --     },
     -- }
 
+    -- markdown viewer --
+    use {
+        "iamcco/markdown-preview.nvim",
+        run = function() vim.fn["mkdp#util#install"]() end,
+        setup = [[require('config.markdown_preview_setup')]],
+        ft = { 'markdown' },
+    }
+
     -- automatically set up your configuration after cloning packer.nvim
 	-- put this at the end after all plugins
     if PACKER_BOOTSTRAP then
