@@ -181,3 +181,4 @@ if system('uname -a | grep -i Microsoft') != ''
         au TextYankPost * :call system('clip', @")
     augroup END
 endif
+
