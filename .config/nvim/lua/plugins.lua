@@ -44,6 +44,7 @@ return packer.startup(function(use)
 
     -- colorschemes --
     use 'cocopon/iceberg.vim' -- theme
+    use 'morhetz/gruvbox' -- theme
     use 'vim-airline/vim-airline' -- awesome status bar
     use 'vim-airline/vim-airline-themes' -- status bar themes
 
@@ -102,6 +103,12 @@ return packer.startup(function(use)
             'nvim-tree/nvim-web-devicons', -- for file icons
         },
         config = [[require('config.tree')]]
+    }
+
+    -- github copilot
+    use {
+        'github/copilot.vim',
+        event = 'InsertEnter',
     }
 
     -- completion --
@@ -163,7 +170,13 @@ return packer.startup(function(use)
     --     },
     -- }
 
-    -- markdown viewer --
+    -- language specific --
+    use {
+        'vlime/vlime',
+        ft = { 'lisp' },
+    }
+
+    -- markdown viewer
     use {
         "iamcco/markdown-preview.nvim",
         run = function() vim.fn["mkdp#util#install"]() end,

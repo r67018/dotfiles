@@ -13,6 +13,8 @@ autocmd('TermOpen', {
         command('setlocal nonumber norelativenumber')
         -- start in insert mode
         command('startinsert')
+        --
+        -- command([[chdir(expand('%:p:h'))]])
     end
 })
 
