@@ -53,6 +53,7 @@ set -x PATH ~/go/bin $PATH
 set -x PATH "$DENO_INSTALL/bin" $PATH
 set -x PATH ~/dev/bin $PATH
 set -x PATH ~/.local/bin $PATH
+set -x PATH /usr/local/zig $PATH
 
 ### set xserver ###
 if [ -e /mnt/c/WINDOWS/System32/wsl.exe ]
@@ -92,6 +93,11 @@ end
 
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /home/ryo/.ghcup/bin $PATH # ghcup-env
 
-# move to home directory
-cd
+
+# pnpm
+set -gx PNPM_HOME "/home/ryo/.local/share/pnpm"
+if not string match -q -- $PNPM_HOME $PATH
+  set -gx PATH "$PNPM_HOME" $PATH
+end
+# pnpm end
 

@@ -124,6 +124,18 @@ _G.packer_plugins = {
     path = "/home/ryo/.local/share/nvim/site/pack/packer/opt/cmp-path",
     url = "https://github.com/hrsh7th/cmp-path"
   },
+  ["copilot.vim"] = {
+    loaded = false,
+    needs_bufread = false,
+    only_cond = false,
+    path = "/home/ryo/.local/share/nvim/site/pack/packer/opt/copilot.vim",
+    url = "https://github.com/github/copilot.vim"
+  },
+  gruvbox = {
+    loaded = true,
+    path = "/home/ryo/.local/share/nvim/site/pack/packer/start/gruvbox",
+    url = "https://github.com/morhetz/gruvbox"
+  },
   ["hop.nvim"] = {
     config = { "require('config.hop')" },
     loaded = true,
@@ -134,6 +146,13 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/ryo/.local/share/nvim/site/pack/packer/start/iceberg.vim",
     url = "https://github.com/cocopon/iceberg.vim"
+  },
+  ["markdown-preview.nvim"] = {
+    loaded = false,
+    needs_bufread = false,
+    only_cond = false,
+    path = "/home/ryo/.local/share/nvim/site/pack/packer/opt/markdown-preview.nvim",
+    url = "https://github.com/iamcco/markdown-preview.nvim"
   },
   ["mason-lspconfig.nvim"] = {
     loaded = true,
@@ -264,6 +283,13 @@ _G.packer_plugins = {
     only_cond = false,
     path = "/home/ryo/.local/share/nvim/site/pack/packer/opt/vim-easy-align",
     url = "https://github.com/junegunn/vim-easy-align"
+  },
+  vlime = {
+    loaded = false,
+    needs_bufread = true,
+    only_cond = false,
+    path = "/home/ryo/.local/share/nvim/site/pack/packer/opt/vlime",
+    url = "https://github.com/vlime/vlime"
   }
 }
 
@@ -296,6 +322,10 @@ if not vim.g.packer_custom_loader_enabled then
   vim.g.packer_custom_loader_enabled = true
 end
 
+-- Setup for: markdown-preview.nvim
+time([[Setup for markdown-preview.nvim]], true)
+require('config.markdown_preview_setup')
+time([[Setup for markdown-preview.nvim]], false)
 -- Setup for: telescope.nvim
 time([[Setup for telescope.nvim]], true)
 require('config.telescope_setup')
@@ -319,17 +349,22 @@ pcall(vim.api.nvim_create_user_command, 'Telescope', function(cmdargs)
           require('packer.load')({'telescope.nvim'}, { cmd = 'Telescope', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
         end,
         {nargs = '*', range = true, bang = true, complete = function()
-          require('packer.load')({'telescope.nvim'}, { cmd = 'Telescope' }, _G.packer_plugins)
+          require('packer.load')({'telescope.nvim'}, {}, _G.packer_plugins)
           return vim.fn.getcompletion('Telescope ', 'cmdline')
       end})
 time([[Defining lazy-load commands]], false)
 
 vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
+  -- Filetype lazy-loads
+time([[Defining lazy-load filetype autocommands]], true)
+vim.cmd [[au FileType lisp ++once lua require("packer.load")({'vlime'}, { ft = "lisp" }, _G.packer_plugins)]]
+vim.cmd [[au FileType markdown ++once lua require("packer.load")({'markdown-preview.nvim'}, { ft = "markdown" }, _G.packer_plugins)]]
+time([[Defining lazy-load filetype autocommands]], false)
   -- Event lazy-loads
 time([[Defining lazy-load event autocommands]], true)
-vim.cmd [[au InsertEnter * ++once lua require("packer.load")({'nvim-autopairs', 'LuaSnip'}, { event = "InsertEnter *" }, _G.packer_plugins)]]
-vim.cmd [[au VimEnter * ++once lua require("packer.load")({'nvim-cmp', 'vim-easy-align', 'trouble.nvim', 'Comment.nvim', 'nvim-surround'}, { event = "VimEnter *" }, _G.packer_plugins)]]
+vim.cmd [[au InsertEnter * ++once lua require("packer.load")({'copilot.vim', 'nvim-autopairs', 'LuaSnip'}, { event = "InsertEnter *" }, _G.packer_plugins)]]
+vim.cmd [[au VimEnter * ++once lua require("packer.load")({'nvim-cmp', 'vim-easy-align', 'trouble.nvim', 'nvim-surround', 'Comment.nvim'}, { event = "VimEnter *" }, _G.packer_plugins)]]
 vim.cmd [[au BufWrite * ++once lua require("packer.load")({'trim.nvim'}, { event = "BufWrite *" }, _G.packer_plugins)]]
 time([[Defining lazy-load event autocommands]], false)
 vim.cmd("augroup END")
