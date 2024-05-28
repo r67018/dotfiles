@@ -1,0 +1,1 @@
+/home/ryo/opt/fzf-0.35.1/shell/key-bindings.fish
