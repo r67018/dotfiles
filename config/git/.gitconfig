@@ -1,0 +1,16 @@
+[user]
+	email = swear1208a13@gmail.com
+	name = Ryosei Goto
+[credential "https://github.com"]
+	helper =
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !/usr/bin/gh auth git-credential
+[alias]
+	alias = config --get-regexp ^alias\\.
+	cm = commit -m
+	co = checkout
+	st = status
+	br = branch
+
