@@ -49,6 +49,8 @@ alias sl='ls'
 # alias
 alias vim='nvim'
 alias clip='xsel --clipboard --input'
+alias ..='cd ..'
+alias ...='cd ../..'
 
 # PATH
 export PATH=$PATH:$HOME/.local/bin
