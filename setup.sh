@@ -2,6 +2,8 @@
 
 PWD=$(pwd -P)
 
+# zsh
+ln -nfs $PWD/config/zsh/.zshrc ~/.zshrc
 # tmux
 ln -nfs $PWD/config/tmux/.tmux.conf ~/.tmux.conf
 # fish
