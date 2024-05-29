@@ -1,2 +1,2 @@
-config/nvim/**/packer_compiled.lua
+.config/nvim/**/packer_compiled.lua
 
