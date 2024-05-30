@@ -17,7 +17,7 @@ ln -nfs $PWD/.config/intellij/.ideavimrc ~/.ideavimrc
 # wezterm
 ln -nfs $PWD/.config/wezterm/.wezterm.lua ~/.wezterm.lua
 # gnome terminal
-if command -v dconf &> /dev/null; then
+if command -v dconf > /dev/null; then
     dconf load /org/gnome/terminal/ < $PWD/.config/gnome/terminal/settings.txt
 fi
 
