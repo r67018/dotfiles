@@ -51,6 +51,8 @@ alias vim='nvim'
 alias clip='xsel --clipboard --input'
 alias ..='cd ..'
 alias ...='cd ../..'
+alias ghs='gh copilot suggest'
+alias ghe='gh copilot explain'
 
 # PATH
 export PATH=$PATH:$HOME/.local/bin
