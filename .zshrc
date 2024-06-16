@@ -56,6 +56,7 @@ alias ghe='gh copilot explain'
 
 # PATH
 export PATH=$PATH:$HOME/.local/bin
+export PATH=$PATH:/snap/bin
 
 export BAT_THEME=base16
 
