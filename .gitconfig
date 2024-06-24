@@ -22,3 +22,5 @@
 	l5 = log --oneline -5
 	l10 = log --oneline -10
 
+[init]
+	defaultBranch = main
