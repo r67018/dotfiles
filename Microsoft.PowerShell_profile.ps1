@@ -4,6 +4,9 @@
 # Variables
 $DHOME = "D:/Users/swear/"
 
+# Aliases
+Set-Alias -Name vim -Value nvim
+
 # Keybindings
 Set-PSReadLineKeyHandler -Key "Ctrl+d" -Function DeleteChar
 Set-PSReadLineKeyHandler -Key "Ctrl+w" -Function BackwardKillWord
