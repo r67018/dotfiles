@@ -6,29 +6,39 @@ set smartcase
 set easymotion
 set surround
 set commentary
+set NERDTree
 
 " keymaps
 let mapleader = "\<space>"
+
+" editor
 nmap <CR> o<ESC>
 nmap <S-CR> O<ESC>
-nmap <Leader>e <Action>(ShowErrorDescription)
-nmap <Leader>k <Action>(ShowHoverInfo)
+nmap <Leader>r :action Replace<CR>
+vmap <Leader>r :action Replace<CR>
+nmap <Leader>R :action ReplaceInPath<CR>
+vmap <Leader>R :action ReplaceInPath<CR>
+nmap <Leader>f :action Find<CR>
+vmap <Leader>f :action Find<CR>
+nmap <Leader>F :action FindInPath<CR>
+vmap <Leader>F :action FindInPath<CR>
+
+" go to
 nmap gi <Action>(GotoImplementation)
 
-nmap <Space>r :action Replace<CR>
-vmap <Space>r :action Replace<CR>
-nmap <Space>R :action ReplaceInPath<CR>
-vmap <Space>R :action ReplaceInPath<CR>
-nmap <Space>f :action Find<CR>
-vmap <Space>f :action Find<CR>
-nmap <Space>F :action FindInPath<CR>
-vmap <Space>F :action FindInPath<CR>
+nmap <Leader>b <Action>(Run)
+nmap <Leader>B <Action>(Debug)
+nmap <Leader>t <Action>(ActivateTerminalToolWindow)
+nmap <Leader>e <Action>(ShowErrorDescription)
+nmap <Leader>k <Action>(ShowHoverInfo)
+" nmap <Esc> <Action>(HideActiveToolWindow)
 
 " plugins
 map <leader>l <Plug>(easymotion-bd-jk)
 xmap <leader>l <Plug>(easymotion-bd-jk)
 map <leader>s <Plug>(easymotion-s2)
 xmap <leader>s <Plug>(easymotion-s2)
-nmap gcc :action CommentByLineComment<CR>
-vmap gc :action CommentByLineComment<CR>
-
+nmap gcc <Action>(CommentByLineComment)
+vmap gc <Action>(CommentByLineComment)
+nmap <C-n> :NERDTreeToggle<CR>
+nmap <Leader>cc <Action>(ActivateGitHubCopilotChatToolWindow)
