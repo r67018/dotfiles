@@ -104,6 +104,11 @@ in
     enable = true;
     userName = "Ryosei Goto";
     userEmail = "contact@r67018.com";
+    extraConfig = {
+      init = {
+        defaultBranch = "main";
+      };
+    };
   };
 
   # Use SSH key managed in 1Password
