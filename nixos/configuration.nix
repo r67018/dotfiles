@@ -7,7 +7,7 @@
 {
   imports =
     [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
+      # ./hardware-configuration.nix
       # xremap module
       inputs.xremap.nixosModules.default
     ];
@@ -122,16 +122,16 @@
     serviceMode = "user";
     withSway = true;
     config = {
-      modmap = [
-        {
-          # CapsLockをCtrlに置換
-          name = "Swap left Ctrl and CapsLock";
-          remap = {
-            CapsLock = "Ctrl_L";
-	    Ctrl_L = "CapsLock";
-          };
-        }
-     ];
+     #  modmap = [
+     #    {
+     #      # CapsLockをCtrlに置換
+     #      name = "Swap left Ctrl and CapsLock";
+     #      remap = {
+     #        CapsLock = "Ctrl_L";
+     # Ctrl_L = "CapsLock";
+     #      };
+     #    }
+     # ];
      keymap = [
        {
          # Ctrl + HがどのアプリケーションでもBackspaceになるように変更

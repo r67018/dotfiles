@@ -7,10 +7,21 @@
 
   outputs = inputs: {
     nixosConfigurations = {
-      nixos = inputs.nixpkgs.lib.nixosSystem {
+      desktop = inputs.nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
           ./configuration.nix
+	  ./hosts/desktop/hardware-configuration.nix
+        ];
+        specialArgs = {
+            inherit inputs;
+        };
+      };
+      laptop = inputs.nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./configuration.nix
+          ./hosts/laptop/hardware-configuration.nix
         ];
         specialArgs = {
             inherit inputs;
