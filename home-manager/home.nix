@@ -26,6 +26,7 @@ in
     inputs.nixvim.homeModules.nixvim
 
     ./modules/sway.nix
+    ./modules/zsh.nix
     ./modules/nixvim.nix
     ./modules/alacritty.nix
   ];
@@ -130,19 +131,6 @@ in
       Host *
           IdentityAgent ${onePassPath}
     '';
-  };
-
-  programs.zsh = {
-    enable = true;
-    shellAliases = {
-      cat = "bat";
-      vi = "nvim";
-      vim = "nvim";
-    };
-  };
-  programs.starship = {
-    enable = true;
-    enableZshIntegration = true;
   };
 
   # VSCode
