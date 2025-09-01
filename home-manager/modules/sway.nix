@@ -3,7 +3,7 @@
   wayland.windowManager.sway = {
     enable = true;
     config = {
-      modifier = "Super";
+      modifier = "Alt";
       terminal = "alacritty";
     };
   };
