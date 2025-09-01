@@ -109,6 +109,13 @@ in
         defaultBranch = "main";
       };
     };
+    aliases = {
+      cm = "commit -m";
+      st = "status";
+      br = "branch";
+      co = "checkout";
+      df = "diff";
+    };
   };
 
   # Use SSH key managed in 1Password
@@ -139,7 +146,7 @@ in
 
   # VSCode
   programs.vscode.enable = true;
-  # Use gnome-keyring in VSCode
+  # Use gnome-keyring in VSCode:!
   # ref: https://code.visualstudio.com/docs/configure/settings-sync#_recommended-configure-the-keyring-to-use-with-vs-code
   home.activation.vscodeArgs = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     if [ -f ${vscodeArgvFile} ]; then
