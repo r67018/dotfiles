@@ -3,6 +3,10 @@
 {
   programs.nixvim = {
     enable = true;
+    colorscheme = "iceberg";
+    globals = {
+      mapleader = " ";
+    };
     opts = {
       number = true;
       relativenumber = true;
@@ -26,6 +30,15 @@
         enable = true;
       };
     };
+    extraPlugins = with pkgs; [
+      vimPlugins.iceberg-vim
+    ];
+    keymaps = [
+      {
+        key = "<leader>e";
+        action = "<cmd>NvimTreeToggle<CR>";
+      }
+    ];
   };
 }
 
