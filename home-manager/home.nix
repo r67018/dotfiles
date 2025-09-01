@@ -25,6 +25,7 @@ in
     inputs.zen-browser.homeModules.twilight
     inputs.nixvim.homeModules.nixvim
 
+    ./modules/sway.nix
     ./modules/nixvim.nix
     ./modules/alacritty.nix
   ];
