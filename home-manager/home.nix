@@ -23,6 +23,9 @@ in
 
   imports = [
     inputs.zen-browser.homeModules.twilight
+    inputs.nixvim.homeModules.nixvim
+
+    ./modules/nixvim.nix
   ];
 
   # The home.packages option allows you to install Nix packages into your
@@ -131,17 +134,9 @@ in
     enable = true;
     shellAliases = {
       cat = "bat";
+      vi = "nvim";
+      vim = "nvim";
     };
-  };
-
-  programs.neovim = {
-    enable = true;
-    viAlias = true;
-    vimAlias = true;
-    plugins = with pkgs.vimPlugins; [
-      nvim-treesitter.withAllGrammars
-      nvim-lspconfig
-    ];
   };
 
   # VSCode
