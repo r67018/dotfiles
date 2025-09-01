@@ -26,6 +26,7 @@ in
     inputs.nixvim.homeModules.nixvim
 
     ./modules/nixvim.nix
+    ./modules/alacritty.nix
   ];
 
   # The home.packages option allows you to install Nix packages into your
