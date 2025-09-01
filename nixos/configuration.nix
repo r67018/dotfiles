@@ -115,6 +115,20 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+  # Enable Bluetooth
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings = {
+      General = {
+        # Shows battery charge of connected devices on supported
+        Experimental = true;
+      };
+    };
+  };
+  # Enable tool to configure Bluetooth device with GUI
+  services.blueman.enable = true;
+
   services.xremap = {
     enable = true;
     userName = "ryosei";
