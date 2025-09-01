@@ -66,6 +66,8 @@
   fonts.packages = with pkgs; [
     noto-fonts
     noto-fonts-cjk-sans # Japanese, Chinese and Korean fonts
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.noto
   ];
 
   # Disable the X11 windowing system.
@@ -173,9 +175,6 @@
       defaultEditor = true;
       viAlias = true;
       vimAlias = true;
-    };
-    starship = {
-      enable = true;
     };
     zsh = {
       enable = true;

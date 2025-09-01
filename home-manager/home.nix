@@ -139,6 +139,10 @@ in
       vim = "nvim";
     };
   };
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+  };
 
   # VSCode
   programs.vscode.enable = true;
