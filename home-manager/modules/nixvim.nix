@@ -59,12 +59,12 @@
       }
     ];
     extraConfigLua = ''
-      # Close nvim-tree when quitting nvim
+      -- Close nvim-tree when quitting nvim
       vim.api.nvim_create_autocmd({"QuitPre"}, {
         callback = function() vim.cmd("NvimTreeClose") end,
       })
 
-      # Close nvim-tree automatically on focus lost
+      -- Close nvim-tree automatically on focus lost
       vim.api.nvim_create_autocmd("WinEnter", {
         callback = function()
           local nvim_tree_utils = require("nvim-tree.utils")
