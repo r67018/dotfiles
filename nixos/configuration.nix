@@ -76,6 +76,7 @@
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = false;
+  services.displayManager.sessionPackages = [ pkgs.sway ];
 
   # For starting fcitx5 on Sway automatically
   # ref: https://wiki.nixos.org/wiki/Fcitx5
