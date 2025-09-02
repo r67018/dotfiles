@@ -128,6 +128,9 @@ in
   # Use SSH key managed in 1Password
   programs.ssh = {
     enable = true;
+    enableDefaultConfig = false;
+    matchBlocks."*" = {
+    };
     extraConfig = ''
       Host *
           IdentityAgent ${onePassPath}
