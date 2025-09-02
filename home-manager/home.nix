@@ -26,6 +26,7 @@ in
     inputs.nixvim.homeModules.nixvim
 
     ./modules/sway.nix
+    ./modules/waybar.nix
     ./modules/zsh.nix
     ./modules/bat.nix
     ./modules/nixvim.nix
