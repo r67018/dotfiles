@@ -22,13 +22,14 @@ in
   nixpkgs.config.allowUnfree = true;
 
   imports = [
-    inputs.zen-browser.homeModules.twilight
+    inputs.zen-browser.homeModules.beta
     inputs.nixvim.homeModules.nixvim
 
     ./modules/sway.nix
     ./modules/zsh.nix
     ./modules/nixvim.nix
     ./modules/alacritty.nix
+    ./modules/zen-browser.nix
   ];
 
   # The home.packages option allows you to install Nix packages into your
@@ -157,20 +158,5 @@ in
     extensions = with pkgs; [
       gh-copilot
     ];
-  };
-
-  programs.zen-browser = {
-    enable = true;
-    policies = let
-      mkExtensionSettings = builtins.mapAttrs (_: pluginId: {
-      install_url = "https://addons.mozilla.org/firefox/downloads/latest/${pluginId}/latest.xpi";
-      installation_mode = "force_installed";
-    });
-    in {
-      # Refer https://github.com/0xc000022070/zen-browser-flake?tab=readme-ov-file#extensions to know how to check extension id
-      ExtensionSettings = mkExtensionSettings {
-        "{d634138d-c276-4fc8-924b-40a0ea21d284}" = "1password-x-password-manager";
-      };
-    };
   };
 }
