@@ -27,6 +27,7 @@ in
 
     ./modules/sway.nix
     ./modules/zsh.nix
+    ./modules/bat.nix
     ./modules/nixvim.nix
     ./modules/alacritty.nix
     ./modules/zen-browser.nix
@@ -38,7 +39,6 @@ in
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
-    bat
     seahorse
     thunderbird
 
