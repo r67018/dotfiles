@@ -177,6 +177,9 @@
     ];
   };
 
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
+
   # Install packages with options
   programs = {
     git = {
@@ -204,6 +207,15 @@
     firefox = {
       enable = true;
     };
+    _1password = {
+      enable = true;
+    };
+    _1password-gui = {
+      enable = true;
+      # Certain features, including CLI integration and system authentication support,
+      # require enabling PolKit integration on some desktop environments (e.g. Plasma).
+      polkitPolicyOwners = [ "yourUsernameHere" ];
+    };
   };
 
   # List packages installed in system profile. To search, run:
@@ -223,6 +235,17 @@
       bindkey -e # Specify emacs key binding
     fi
   '';
+
+  environment.etc = {
+    # Unlock 1Password extension when the browser opens
+    "1password/custom_allowed_browsers" = {
+      text = ''
+        zen
+      '';
+      mode = "0755";
+    };
+  };
+
 
   # Define environment variables
   # environment.sessionVariables = {

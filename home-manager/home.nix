@@ -40,8 +40,6 @@ in
     # pkgs.hello
     bat
     seahorse
-    _1password-cli
-    _1password-gui
     thunderbird
 
     nil # Nix language server
