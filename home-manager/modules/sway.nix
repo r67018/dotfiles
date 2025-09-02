@@ -5,6 +5,7 @@
     config = {
       modifier = "Alt";
       terminal = "alacritty";
+      defaultWorkspace = "workspace number 1";
       bars = []; # Disable swaybar
       startup = [
         {
