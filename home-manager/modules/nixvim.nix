@@ -30,6 +30,12 @@
       nvim-autopairs = {
        enable = true;
       };
+      airline = {
+        enable = true;
+        settings = {
+          theme = "iceberg";
+        };
+      };
       lsp = {
         enable = true;
         servers = {
