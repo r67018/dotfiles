@@ -7,6 +7,8 @@
       grep = "rg";
       vi = "nvim";
       vim = "nvim";
+      c = "wl-copy";
+      p = "wl-paste";
     };
   };
   programs.starship = {
