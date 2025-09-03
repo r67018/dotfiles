@@ -18,6 +18,8 @@
       keybindings = lib.mkOptionDefault {
         "${config.modifier}+d" = "exec wofi --show drun";
         # "${config.modifier}+Shift+e" = "exec swaylock";
+        "${config.modifier}+c" = ''exec grim -g "$(slurp)" - | wl-copy'';
+        "${config.modifier}+Shift+c" = ''exec grim - | wl-copy'';
       };
     };
     extraConfig = ''

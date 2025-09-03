@@ -54,9 +54,13 @@ in
     # pkgs.hello
     # For Sway
     swaylock
+    grim # Screenshot
+    slurp # Clip screen area 
+    wl-clipboard # Clipboard
 
     # CLI tools
     ripgrep
+    jq
     gemini-cli
     # Desktop applications
     seahorse
