@@ -4,6 +4,7 @@
     enable = true;
     shellAliases = {
       cat = "bat";
+      grep = "rg";
       vi = "nvim";
       vim = "nvim";
     };
