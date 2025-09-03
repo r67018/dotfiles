@@ -18,6 +18,17 @@ in
   # release notes.
   home.stateVersion = "25.05"; # Please read the comment before changing.
 
+  i18n.inputMethod = {
+    enable = true;
+    type = "fcitx5";
+
+    fcitx5.waylandFrontend = true;
+    fcitx5.addons = with pkgs; [
+      fcitx5-skk
+      fcitx5-gtk
+    ];
+  };
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 

@@ -44,23 +44,14 @@
     LC_TIME = "ja_JP.UTF-8";
   };
 
-  i18n.inputMethod = {
-    enable = true;
-    type = "fcitx5";
-    fcitx5.waylandFrontend = true;
-    fcitx5.addons = with pkgs; [
-      fcitx5-skk # Japanese input method
-    ];
-  };
-  systemd.user.services.fcitx5 = {
-    description = "Fcitx5 Input Method Framework";
-    wantedBy = [ "graphical-session.target" ];
-    serviceConfig = {
-      ExecStart = "${config.i18n.inputMethod.package}/bin/fcitx5";
-      Restart = "always";
-    };
-  };
-
+  # i18n.inputMethod = {
+  #   enable = true;
+  #   type = "fcitx5";
+  #   fcitx5.waylandFrontend = true;
+  #   fcitx5.addons = with pkgs; [
+  #     fcitx5-skk # Japanese input method
+  #   ];
+  # };
 
   # Configure fonts
   fonts.packages = with pkgs; [
