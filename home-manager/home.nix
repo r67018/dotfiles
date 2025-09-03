@@ -56,6 +56,7 @@ in
     # Desktop applications
     seahorse
     thunderbird
+    jetbrains-toolbox
 
     nil # Nix language server
     # # It is sometimes useful to fine-tune packages, for example, by applying
