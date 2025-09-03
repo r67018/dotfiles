@@ -34,7 +34,7 @@
       };
       clock = {
         format = "  {:%H:%M}";
-        format-alt = "{:%H:%M}";
+        format-alt = "  {:%Y/%m/%d %H:%M}";
         tooltip-format = "{:%Y-%m-%d | %H:%M:%S}";
       };
       cpu = {
