@@ -18,9 +18,9 @@
       ];
       modules-center = [ "sway/window" ];
       modules-right = [
+        "tray"
         "pulseaudio"
         "clock"
-        "tray"
       ];
       "sway/window" = {
         max-length = 50;
