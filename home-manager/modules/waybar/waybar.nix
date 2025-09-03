@@ -44,7 +44,7 @@
       memory = {
         interval = 30;
         format = "   {}%";
-        format-alt = " {used:0.1f}G";
+        format-alt = "   {used:0.1f}G";
       };
       network = {
         format-wifi = "󰖩  {essid}";
