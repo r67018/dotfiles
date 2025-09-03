@@ -27,6 +27,10 @@
           };
         };
       };
+      leap = {
+        enable = true;
+        addDefaultMappings = false;
+      };
       nvim-autopairs = {
        enable = true;
       };
@@ -62,6 +66,19 @@
         key = "gl";
         action = ":lua vim.diagnostic.open_float()<CR>";
         options.desc = "Show hover information";
+      }
+      # leap.nvim
+      {
+        mode = [ "n" "x" "o" ];
+        key = "<leader>s";
+        action = "<Plug>(leap)";
+        options.desc = "Leap forward";
+      }
+      {
+        mode = [ "n" "x" "o" ];
+        key = "<leader>S";
+        action = "<Plug>(leap-anywhere)";
+        options.desc = "Leap across windows";
       }
     ];
     extraConfigLua = ''
