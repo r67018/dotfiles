@@ -53,6 +53,7 @@ in
     # pkgs.hello
     # CLI tools
     ripgrep
+    gemini-cli
     # Desktop applications
     seahorse
     thunderbird
