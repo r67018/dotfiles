@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 {
   programs.waybar = {
     enable = true;
@@ -62,10 +62,10 @@
       pulseaudio = {
         format = "{icon}   {volume}%";
         tooltip = false;
-        format-muted = " Muted";
-        on-click = "pamixer -t";
-        on-scroll-up = "pamixer -i 5";
-        on-scroll-down = "pamixer -d 5";
+        format-muted = "  Muted";
+        on-click = "${pkgs.pamixer}/bin/pamixer -t";
+        on-scroll-up = "${pkgs.pamixer}/bin/pamixer -i 5";
+        on-scroll-down = "${pkgs.pamixer}/bin/pamixer -d 5";
         scroll-step = 5;
         format-icons = {
           headphone = "";
