@@ -51,6 +51,10 @@ in
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
+    # For Sway
+    wofi
+    swaylock
+
     # CLI tools
     ripgrep
     gemini-cli
