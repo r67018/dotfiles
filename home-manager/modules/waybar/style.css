@@ -1,5 +1,11 @@
+@define-color iceberg_bg #161821;
+@define-color iceberg_fg #c6c8d1;
+@define-color iceberg_keyword #84a0c6;
+@define-color iceberg_whitespace #242940;
+@define-color iceberg_comment #6b7089; /* Adding comment color for potential use */
+
 #waybar {
-  background-color: #161821;
+  background-color: @iceberg_bg;
 }
 
 #workspaces,
@@ -10,23 +16,23 @@
 #pulseaudio,
 #network,
 #tray {
-  background-color: #282a36;
-  color: #c6c8d1;
+  background-color: @iceberg_whitespace; /* Using whitespace for modules */
+  color: @iceberg_fg;
   padding: 0 10px;
   margin: 2px 0px;
   border-radius: 10px;
 }
 
 #window {
-    color: #c6c8d1;
+    color: @iceberg_fg;
     background-color: transparent;
 }
 
 #workspaces button {
-    color: #c6c8d1;
+    color: @iceberg_fg;
 }
 
 #workspaces button.focused {
-    color: #ffffff;
-    background-color: #4c566a;
+    color: @iceberg_fg;
+    background-color: @iceberg_keyword; /* Using keyword for focused highlight */
 }

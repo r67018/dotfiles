@@ -38,6 +38,7 @@ in
 
     ./modules/sway.nix
     ./modules/waybar/waybar.nix
+    ./modules/wofi/wofi.nix
     ./modules/zsh.nix
     ./modules/bat.nix
     ./modules/nixvim.nix
@@ -52,7 +53,6 @@ in
     # # "Hello, world!" when run.
     # pkgs.hello
     # For Sway
-    wofi
     swaylock
 
     # CLI tools

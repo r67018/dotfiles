@@ -1,0 +1,46 @@
+/* Wofi CSS */
+@define-color iceberg_bg #161821;
+@define-color iceberg_fg #c6c8d1;
+@define-color iceberg_keyword #84a0c6;
+@define-color iceberg_whitespace #242940;
+@define-color iceberg_comment #6b7089; /* Adding comment color for potential use */
+
+window {
+    background-color: @iceberg_bg; /* Using iceberg_bg for background */
+    border: 2px solid @iceberg_keyword; /* Using iceberg_keyword for border */
+    border-radius: 8px;
+}
+
+#input {
+    background-color: @iceberg_whitespace; /* Using iceberg_whitespace for input background */
+    color: @iceberg_fg; /* Using iceberg_fg for input text color */
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+#outer-box {
+    padding: 10px;
+}
+
+#scroll {
+    margin-top: 5px;
+}
+
+#text {
+    padding: 5px;
+    margin: 0px;
+}
+
+#entry {
+    padding: 8px;
+    margin: 2px 0;
+    border-radius: 5px;
+    color: @iceberg_fg; /* Explicitly set text color for unselected entries */
+}
+
+#entry:selected {
+    background-color: @iceberg_keyword; /* Highlight background */
+    color: @iceberg_fg; /* Bright text for selected item */
+}
