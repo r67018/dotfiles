@@ -65,6 +65,7 @@ in
     # Desktop applications
     seahorse
     thunderbird
+    rquickshare
     jetbrains-toolbox
 
     nil # Nix language server
