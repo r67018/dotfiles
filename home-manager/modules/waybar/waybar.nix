@@ -61,7 +61,6 @@
       };
       pulseaudio = {
         format = "{icon}   {volume}%";
-        tooltip = false;
         format-muted = "  Muted";
         on-click = "${pkgs.pamixer}/bin/pamixer -t";
         on-scroll-up = "${pkgs.pamixer}/bin/pamixer -i 5";
