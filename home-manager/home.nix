@@ -40,6 +40,7 @@ in
     ./modules/waybar/waybar.nix
     ./modules/wofi/wofi.nix
     ./modules/zsh.nix
+    ./modules/direnv.nix
     ./modules/bat.nix
     ./modules/nixvim.nix
     ./modules/alacritty.nix
