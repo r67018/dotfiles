@@ -21,7 +21,13 @@
         "tray"
         "pulseaudio"
         "clock"
+        "custom/power"
       ];
+      "custom/power" = {
+        format = "";
+        on-click = "${pkgs.wlogout}/bin/wlogout";
+        tooltip = false;
+      };
       "sway/window" = {
         max-length = 50;
       };

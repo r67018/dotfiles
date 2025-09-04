@@ -13,6 +13,7 @@
 #battery,
 #memory,
 #cpu,
+#custom-power,
 #pulseaudio,
 #network,
 #tray {
@@ -21,6 +22,7 @@
   padding: 0 10px;
   margin: 2px 0px;
   border-radius: 10px;
+  min-width: 15px;
 }
 
 #window {
@@ -36,3 +38,4 @@
     color: @iceberg_fg;
     background-color: @iceberg_comment;
 }
+
