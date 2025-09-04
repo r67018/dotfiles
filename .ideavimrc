@@ -29,8 +29,9 @@ nmap gi <Action>(GotoImplementation)
 nmap <Leader>b <Action>(Run)
 nmap <Leader>B <Action>(Debug)
 nmap <Leader>t <Action>(ActivateTerminalToolWindow)
-nmap <Leader>e <Action>(ShowErrorDescription)
+nmap <Leader>K <Action>(ShowErrorDescription)
 nmap <Leader>k <Action>(ShowHoverInfo)
+nmap <Leader>o <Action>(GotoFile)
 " nmap <Esc> <Action>(HideActiveToolWindow)
 
 " plugins
@@ -40,5 +41,5 @@ map <leader>s <Plug>(easymotion-s2)
 xmap <leader>s <Plug>(easymotion-s2)
 nmap gcc <Action>(CommentByLineComment)
 vmap gc <Action>(CommentByLineComment)
-nmap <C-n> :NERDTreeToggle<CR>
+nmap <leader>e :NERDTreeToggle<CR>
 nmap <Leader>cc <Action>(ActivateGitHubCopilotChatToolWindow)
