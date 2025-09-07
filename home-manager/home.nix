@@ -66,6 +66,7 @@ in
     # Desktop applications
     seahorse
     thunderbird
+    discord
     rquickshare
     jetbrains-toolbox
 
