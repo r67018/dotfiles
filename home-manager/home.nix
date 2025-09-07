@@ -67,6 +67,7 @@ in
     seahorse
     thunderbird
     discord
+    slack
     rquickshare
     jetbrains-toolbox
 
