@@ -240,11 +240,11 @@
 
 
   # Define environment variables
-  # environment.sessionVariables = {
-  #   GTK_IM_MODULE = "fcitx"; # For fcitx5
-  #   QT_IM_MODULE = "fcitx"; # For fcitx5
-  #   XMODIFIERS = "@im=fcitx"; # For fcitx5
-  # };
+  environment.sessionVariables = {
+    GTK_IM_MODULE = "fcitx"; # For fcitx5
+    QT_IM_MODULE = "fcitx"; # For fcitx5
+    XMODIFIERS = "@im=fcitx"; # For fcitx5
+  };
 
 
   # Some programs need SUID wrappers, can be configured further or are
