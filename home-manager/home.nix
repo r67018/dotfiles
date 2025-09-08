@@ -70,6 +70,7 @@ in
     slack
     rquickshare
     jetbrains-toolbox
+    bottles
 
     nil # Nix language server
     # # It is sometimes useful to fine-tune packages, for example, by applying
