@@ -121,6 +121,7 @@ in
   home.sessionVariables = {
     # EDITOR = "vim";
     _JAVA_AWT_WM_NONREPARENTING = "1"; # Enable fcitx5 on JetBrains IDE
+    NIXOS_OZONE_WL = "1"; # Enable Wayland for Electron apps
   };
 
   dconf.settings = {
