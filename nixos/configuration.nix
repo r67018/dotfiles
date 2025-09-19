@@ -102,6 +102,14 @@
     # use the example session manager (no others are packaged yet so this is enabled by default,
     # no need to redefine it in your config for now)
     #media-session.enable = true;
+    extraConfig.pipewire = {
+      "99-custom-sample-rate" = {
+        "context.properties" = {
+          "default.clock.rate" = 192000;
+          "default.clock.allowed-rates" = [ 44100 48000 88200 96000 192000 384000 ];
+        };
+      };
+    };
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -217,6 +225,7 @@
     wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
     mako # notification system developed by swaywm maintainer
     pamixer # Command-line mixer for PulseAudio
+    pulseaudio
     unzip
     wget
   ];
