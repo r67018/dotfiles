@@ -32,10 +32,10 @@
         max-length = 50;
       };
       battery = {
-        format = "{capacity}% {icon}";
-        format-charging = "{capacity}% ";
-        format-plugged = "{capacity}% ";
-        format-alt = "{time} {icon}";
+        format = "{icon} {capacity}%";
+        format-charging = " {capacity}%";
+        format-plugged = " {capacity}%";
+        format-alt = "{icon} {time}";
         format-icons = ["󰂎" "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹"];
       };
       clock = {
@@ -59,7 +59,7 @@
       };
       temperature = {
         thermal-zone = 0;
-        format = "{temperatureC}°C ";
+        format = " {temperatureC}°C";
       };
       tray = {
         tooltip = false;
