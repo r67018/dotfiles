@@ -35,6 +35,7 @@ in
   imports = [
     inputs.zen-browser.homeModules.beta
     inputs.nixvim.homeModules.nixvim
+    inputs.sops-nix.homeManagerModules.sops
 
     ./modules/sway.nix
     ./modules/waybar/waybar.nix
@@ -62,6 +63,7 @@ in
     # CLI tools
     ripgrep
     jq
+    sops
     gemini-cli
     # Desktop applications
     seahorse
@@ -155,6 +157,18 @@ in
     '';
   };
 
+  # Secret files
+  sops = {
+    age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+    defaultSopsFile = ./secrets.yaml;
+    secrets = {
+      "ssh/private-servers" = {
+        path = "${config.home.homeDirectory}/.ssh/config.d/private-servers";
+        mode = "0600";
+      };
+    };
+  };
+
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
@@ -181,6 +195,7 @@ in
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
+    includes = [ "config.d/*" ];
     matchBlocks."*" = {
     };
     extraConfig = ''
