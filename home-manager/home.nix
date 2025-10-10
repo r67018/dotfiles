@@ -183,8 +183,7 @@ in
     matchBlocks."*" = {
     };
     extraConfig = ''
-      Host *
-          IdentityAgent ${onePassPath}
+        IdentityAgent ${onePassPath}
     '';
   };
 
