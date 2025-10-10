@@ -160,7 +160,7 @@ in
   # Secret files
   sops = {
     age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
-    defaultSopsFile = ./secrets.yaml;
+    defaultSopsFile = ../secrets/secrets.yaml;
     secrets = {
       "ssh/private-servers" = {
         path = "${config.home.homeDirectory}/.ssh/config.d/private-servers";
