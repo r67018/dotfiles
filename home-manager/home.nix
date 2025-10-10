@@ -166,6 +166,7 @@ in
       init = {
         defaultBranch = "main";
       };
+      pull.rebase = true;
     };
     aliases = {
       cm = "commit -m";
