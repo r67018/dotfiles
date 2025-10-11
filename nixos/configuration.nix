@@ -280,6 +280,49 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
+  # Allow network interface
+  # networking.firewall.trustedInterfaces = [ "tun0" ];
+
+  # Enable OpenVPN
+  services.openvpn.servers = {
+    tsukuba = {
+      config = ''
+        config ${config.sops.templates."openvpn-tsukuba-config".path}
+      '';
+      up = ''
+        ${pkgs.iproute2}/bin/ip route replace 130.158.6.63/32 via 192.168.0.1 dev enp2s0f1 metric 1
+      '';
+      down = ''
+        # Clean up
+        ${pkgs.iproute2}/bin/ip route del 130.158.6.63/32 2>/dev/null || true
+      '';
+      autoStart = false;
+    };
+  };
+
+  # Set up secret files
+  sops = {
+    age.keyFile = "/etc/sops/age/keys.txt";
+    secrets = {
+      "openvpn/tsukuba/config" = {
+        sopsFile = ../secrets/secrets-openvpn.yaml;
+      };
+      "openvpn/tsukuba/user-pass" = {
+        sopsFile = ../secrets/secrets-openvpn.yaml;
+      };
+    };
+    templates."openvpn-tsukuba-config" = {
+      content = ''
+        ${config.sops.placeholder."openvpn/tsukuba/config"}
+
+        # 認証情報
+        auth-user-pass ${config.sops.secrets."openvpn/tsukuba/user-pass".path}
+
+        # 暗号化
+        data-ciphers AES-256-GCM:AES-128-GCM:AES-128-CBC
+      '';
+    };
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
