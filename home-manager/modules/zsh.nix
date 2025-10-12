@@ -10,6 +10,9 @@
       c = "wl-copy";
       p = "wl-paste";
     };
+    initExtra = ''
+      zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+    '';
   };
   programs.starship = {
     enable = true;
