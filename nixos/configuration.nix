@@ -55,8 +55,12 @@
 
   # Configure fonts
   fonts.packages = with pkgs; [
+    corefonts
     noto-fonts
     noto-fonts-cjk-sans # Japanese, Chinese and Korean fonts
+    noto-fonts-cjk-sans-static
+    noto-fonts-cjk-serif
+    noto-fonts-cjk-serif-static # For typst
     nerd-fonts.jetbrains-mono
     nerd-fonts.noto
   ];
