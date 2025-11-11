@@ -39,22 +39,22 @@
         format-icons = ["󰂎" "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹"];
       };
       clock = {
-        format = "  {:%H:%M}";
-        format-alt = "  {:%Y/%m/%d %H:%M}";
+        format = " {:%H:%M}";
+        format-alt = " {:%Y/%m/%d %H:%M}";
         tooltip-format = "{:%Y-%m-%d | %H:%M:%S}";
       };
       cpu = {
         interval = 10;
-        format = "  {}%";
+        format = " {}%";
       };
       memory = {
         interval = 30;
-        format = "   {}%";
-        format-alt = "   {used:0.1f}G";
+        format = " {}%";
+        format-alt = " {used:0.1f}G";
       };
       network = {
-        format-wifi = "󰖩  {essid}";
-        format-ethernet = "󰈀  {ifname}: {ipaddr}/{cidr}";
+        format-wifi = "󰖩 {essid}";
+        format-ethernet = "󰈀 {ifname}: {ipaddr}/{cidr}";
         format-disconnected = "󰖪 disconnected";
       };
       temperature = {
@@ -66,8 +66,8 @@
         spacing = 10;
       };
       pulseaudio = {
-        format = "{icon}   {volume}%";
-        format-muted = "  Muted";
+        format = "{icon}  {volume}%";
+        format-muted = " Muted";
         on-click = "${pkgs.pamixer}/bin/pamixer -t";
         on-scroll-up = "${pkgs.pamixer}/bin/pamixer -i 5";
         on-scroll-down = "${pkgs.pamixer}/bin/pamixer -d 5";

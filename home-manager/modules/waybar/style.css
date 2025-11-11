@@ -6,6 +6,7 @@
 
 #waybar {
   background-color: @iceberg_bg;
+  font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font";
 }
 
 #workspaces,
