@@ -1,6 +1,5 @@
 { config, lib, pkgs, inputs, ... }:
 let
-  onePassPath = "~/.1password/agent.sock";
   vscodeArgvFile = "~/.vscode/argv.json";
 in
 {
@@ -37,6 +36,8 @@ in
     inputs.nixvim.homeModules.nixvim
     inputs.sops-nix.homeManagerModules.sops
 
+    ./modules/git.nix
+    ./modules/ssh.nix
     ./modules/sway.nix
     ./modules/waybar/waybar.nix
     ./modules/wofi/wofi.nix
@@ -173,41 +174,6 @@ in
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
-
-  programs.git = {
-    enable = true;
-    settings = {
-      user = {
-        name = "Ryosei Goto";
-        email = "contact@r67018.com";
-      };
-      init = {
-        defaultBranch = "main";
-      };
-      pull = {
-        rebase = true;
-      };
-      alias = {
-        cm = "commit -m";
-        st = "status";
-        br = "branch";
-        co = "checkout";
-        df = "diff";
-      };
-    };
-  };
-
-  # Use SSH key managed in 1Password
-  programs.ssh = {
-    enable = true;
-    enableDefaultConfig = false;
-    includes = [ "config.d/*" ];
-    matchBlocks."*" = {
-    };
-    extraConfig = ''
-        IdentityAgent ${onePassPath}
-    '';
-  };
 
   # VSCode
   programs.vscode.enable = true;
