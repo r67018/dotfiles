@@ -29,7 +29,6 @@
       };
       leap = {
         enable = true;
-        addDefaultMappings = false;
       };
       nvim-autopairs = {
        enable = true;

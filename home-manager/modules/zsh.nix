@@ -10,7 +10,7 @@
       c = "wl-copy";
       p = "wl-paste";
     };
-    initExtra = ''
+    initContent = ''
       zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
     '';
   };

@@ -68,7 +68,6 @@ in
     # Desktop applications
     seahorse
     thunderbird
-    webcord
     slack
     rquickshare
     jetbrains-toolbox
@@ -177,20 +176,24 @@ in
 
   programs.git = {
     enable = true;
-    userName = "Ryosei Goto";
-    userEmail = "contact@r67018.com";
-    extraConfig = {
+    settings = {
+      user = {
+        name = "Ryosei Goto";
+        email = "contact@r67018.com";
+      };
       init = {
         defaultBranch = "main";
       };
-      pull.rebase = true;
-    };
-    aliases = {
-      cm = "commit -m";
-      st = "status";
-      br = "branch";
-      co = "checkout";
-      df = "diff";
+      pull = {
+        rebase = true;
+      };
+      alias = {
+        cm = "commit -m";
+        st = "status";
+        br = "branch";
+        co = "checkout";
+        df = "diff";
+      };
     };
   };
 
