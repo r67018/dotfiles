@@ -74,6 +74,7 @@ in
     jetbrains-toolbox
     bottles
 
+    python3
     dotnet-sdk
     nil # Nix language server
     typst
