@@ -65,6 +65,7 @@
     sops
     gemini-cli
     # Desktop applications
+    google-chrome
     seahorse
     thunderbird
     slack
@@ -73,7 +74,7 @@
     bottles
 
     python3
-    dotnet-sdk
+    dotnet-sdk_10
     nil # Nix language server
     typst
     tinymist # Typst
