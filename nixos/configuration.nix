@@ -71,7 +71,7 @@
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = false;
-  services.displayManager.sessionPackages = [ pkgs.sway ];
+  # services.displayManager.sessionPackages = [ pkgs.sway ];
 
   # For starting fcitx5 on Sway automatically
   # ref: https://wiki.nixos.org/wiki/Fcitx5
@@ -85,7 +85,7 @@
 
   # Enable Polkit to use sway on home-manager
   security.polkit.enable = true;
-  # Enable the gnome-keyring secrets vault. 
+  # Enable the gnome-keyring secrets vault.
   # Will be exposed through DBus to programs willing to store secrets.
   services.gnome.gnome-keyring.enable = true;
 
@@ -100,6 +100,7 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+    wireplumber.enable = true;
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
 
@@ -112,6 +113,38 @@
           "default.clock.rate" = 192000;
           "default.clock.allowed-rates" = [ 44100 48000 88200 96000 192000 384000 ];
         };
+      };
+    };
+  };
+
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true; # これが重要：GTKアプリ（Zen/Teams）との連携を強化
+  };
+
+  services.dbus.enable = true;
+
+  # Enable XDG Portal
+  xdg.portal = {
+    enable = true;
+    wlr = {
+      enable = true;
+      settings = {
+        screencast = {
+          chooser_type = "none";
+          output_name = "eDP-1";
+        };
+      };
+    };
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    config = {
+      common = {
+        default = [ "gtk" ];
+      };
+      sway = {
+        default = [ "gtk" ];
+        "org.freedesktop.impl.portal.Screencast" = [ "wlr" ];
+        "org.freedesktop.impl.portal.Screenshot" = [ "wlr" ];
       };
     };
   };
@@ -263,6 +296,10 @@
     GTK_IM_MODULE = "fcitx"; # For fcitx5
     QT_IM_MODULE = "fcitx"; # For fcitx5
     XMODIFIERS = "@im=fcitx"; # For fcitx5
+    NIXOS_OZONE_WL = "1"; # Hint electron apps to use wayland
+    MOZ_ENABLE_WAYLAND = "1"; # Enable Wayland for Firefox/Zen
+    XDG_CURRENT_DESKTOP = "sway"; # Ensure portal detects sway
+    XDG_SESSION_TYPE = "wayland";
   };
 
 

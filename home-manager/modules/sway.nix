@@ -9,6 +9,10 @@
       bars = []; # Disable swaybar
       startup = [
         {
+          # Update env for dbus and systemd, then restart portals
+          command = "${pkgs.bash}/bin/bash -c 'systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK; dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP SWAYSOCK; systemctl --user stop xdg-desktop-portal xdg-desktop-portal-wlr xdg-desktop-portal-gtk; systemctl --user start xdg-desktop-portal xdg-desktop-portal-wlr'";
+        }
+        {
           command = "1password";
         }
         {
