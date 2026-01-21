@@ -264,7 +264,7 @@
         la = "ls -A";
         ll = "ls -lA";
         lh = "ls -lh";
-	grep = "grep --color=auto";
+        grep = "grep --color=auto";
       };
     };
     firefox = {
