@@ -142,23 +142,6 @@
     };
   };
 
-  home.file.".config/wireplumber/main.lua.d/51-force-sample-rate.lua" = {
-    text = ''
-      rule = {
-        matches = {
-          {
-            { "node.name", "matches", "alsa_output.usb-iFi__by_AMR__iFi__by_AMR__HD_USB_Audio_00000000-00.analog-stereo" },
-          },
-        },
-        apply_properties = {
-          ["audio.rate"] = 384000,
-          ["clock.rate"] = 384000,
-        },
-      }
-      table.insert(wireplumber_config, rule)
-    '';
-  };
-
   # Secret files
   sops = {
     age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";

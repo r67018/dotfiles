@@ -115,6 +115,14 @@
         };
       };
     };
+    extraConfig.pipewire-pulse = {
+      "99-custom-sample-rate" = {
+        "context.properties" = {
+          "default.clock.rate" = 192000;
+          "default.clock.allowed-rates" = [ 44100 48000 88200 96000 192000 384000 ];
+        };
+      };
+    };
   };
 
   programs.sway = {
