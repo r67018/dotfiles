@@ -222,6 +222,27 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  nixpkgs.overlays = [
+    (final: prev: {
+      _1password-gui = let
+        wrap = pkg: pkg.overrideAttrs (old: {
+          nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ final.makeWrapper ];
+          postFixup = (old.postFixup or "") + ''
+            if [ -f $out/bin/1password ]; then
+              chmod +x $out/bin/1password
+            fi
+            wrapProgram $out/bin/1password \
+              --unset GTK_IM_MODULE \
+              --unset QT_IM_MODULE \
+              --add-flags "--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime"
+          '';
+        }) // {
+          override = args: wrap (pkg.override args);
+        };
+      in wrap prev._1password-gui;
+    })
+  ];
+
   # Install packages with options
   programs = {
     git = {
