@@ -212,6 +212,7 @@
       "wheel"
       "inputs"
       "docker"
+      "adbusers"
     ];
     shell = pkgs.zsh;
     packages = with pkgs; [
@@ -266,6 +267,9 @@
         lh = "ls -lh";
         grep = "grep --color=auto";
       };
+    };
+    adb = {
+      enable = true;
     };
     firefox = {
       enable = true;
