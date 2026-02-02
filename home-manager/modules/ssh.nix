@@ -1,6 +1,9 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 let
-  onePassPath = "~/.1password/agent.sock";
+  # Use different path for macOS and Linux
+  onePassPath = if pkgs.stdenv.isDarwin
+    then "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\""
+    else "~/.1password/agent.sock";
 in
 {
   # Use SSH key managed in 1Password
@@ -16,7 +19,7 @@ in
       };
     };
     extraConfig = ''
-        IdentityAgent ${onePassPath}
+      IdentityAgent ${onePassPath}
     '';
   };
 
