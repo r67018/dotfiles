@@ -42,5 +42,10 @@
         # to pass through arguments to home.nix
 	extraSpecialArgs = { inherit inputs; };
       };
+
+      darwinModules.default = {
+          home-manager.users.ryosei = import ./home.nix;
+          home-manager.extraSpecialArgs = { inherit inputs; };
+      };
     };
 }
