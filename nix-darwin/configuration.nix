@@ -45,6 +45,7 @@
     enable = true;
     casks = [
       "1password"
+      "zen-browser"
     ];
   };
 }
