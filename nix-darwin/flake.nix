@@ -19,7 +19,7 @@
     }:
     {
       darwinConfigurations = {
-        "RyoseinoMacBook-Air" = darwin.lib.darwinSystem {
+        "greygoose" = darwin.lib.darwinSystem {
           system = "aarch64-darwin";
           # specialArgs = { inherit inputs; };
           modules = [

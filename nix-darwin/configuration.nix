@@ -10,9 +10,28 @@
   # システム設定
   system.primaryUser = "ryosei";
   system.defaults = {
-    dock.autohide = true;
+    # ファインダーのタイトルにPOSIXパスを表示
+    finder._FXShowPosixPathInTitle = true;
+    # 拡張子を表示する
     finder.AppleShowAllExtensions = true;
+    # ドックを爆速で隠し、画面を広く使う
+    dock.autohide = true;
+    dock.autohide-delay = 0.0;
+    dock.autohide-time-modifier = 0.6;
+    # タップでクリック
+    trackpad.Clicking = true;
+    # キーリピートを最速にする
+    NSGlobalDomain.InitialKeyRepeat = 15; # 15が標準の最小値
+    NSGlobalDomain.KeyRepeat = 2; # 2が標準の最小値
   };
+
+  # キーボード設定
+  system.keyboard.enableKeyMapping = true;
+  system.keyboard.remapCapsLockToControl = true;
+
+  # ホスト名・コンピュータ名
+  networking.hostName = "greygoose";
+  networking.computerName = "greygoose";
 
   # ユーザー設定
   users.users."ryosei".home = "/Users/ryosei";
@@ -21,5 +40,12 @@
   nixpkgs.config.allowUnfree = true;
   
   system.stateVersion = 5; 
+
+  homebrew = {
+    enable = true;
+    casks = [
+      "1password"
+    ];
+  };
 }
 
