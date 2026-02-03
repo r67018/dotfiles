@@ -31,6 +31,8 @@
     # キーリピートを最速にする
     NSGlobalDomain.InitialKeyRepeat = 15; # 15が標準の最小値
     NSGlobalDomain.KeyRepeat = 2; # 2が標準の最小値
+    # ファンクションキーを標準のファンクションキーとして使用
+    NSGlobalDomain."com.apple.keyboard.fnState" = true;
   };
 
   # キーボード設定
