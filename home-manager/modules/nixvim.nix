@@ -192,6 +192,12 @@
         action = "<cmd>ToggleTerm direction=float<CR>";
         options.desc = "Toggle floating terminal";
       }
+      {
+        mode = "t";
+        key = "<Esc>";
+        action = "<C-\\><C-n>";
+        options.desc = "Exit terminal mode";
+      }
       # flash.nvim
       {
         mode = [ "n" "x" "o" ];
