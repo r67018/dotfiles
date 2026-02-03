@@ -111,6 +111,15 @@
       inc-rename = {
         enable = true;
       };
+      toggleterm = {
+        enable = true;
+        settings = {
+          direction = "float";
+          float_opts = {
+            border = "curved";
+          };
+        };
+      };
       gitsigns = {
         enable = true;
         settings = {
@@ -176,6 +185,12 @@
         key = "<leader>rn";
         action = ":IncRename ";
         options.desc = "Incremental rename";
+      }
+      {
+        mode = [ "n" "t" ];
+        key = "<leader>t";
+        action = "<cmd>ToggleTerm direction=float<CR>";
+        options.desc = "Toggle floating terminal";
       }
       # flash.nvim
       {
