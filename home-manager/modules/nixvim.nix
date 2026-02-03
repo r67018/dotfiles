@@ -75,6 +75,21 @@
         enable = true;
         servers = {
           nil_ls.enable = true;
+          bashls.enable = true;
+          clangd.enable = true;
+          cssls.enable = true;
+          html.enable = true;
+          jsonls.enable = true;
+          lua_ls.enable = true;
+          pyright.enable = true;
+          rust_analyzer = {
+            enable = true;
+            installCargo = true;
+            installRustc = true;
+          };
+          taplo.enable = true;
+          ts_ls.enable = true;
+          yamlls.enable = true;
         };
         keymaps = {
           lspBuf = {
@@ -91,6 +106,42 @@
         keymaps = {
           "<leader>ff" = "find_files";
           "<leader>fg" = "live_grep";
+        };
+      };
+      inc-rename = {
+        enable = true;
+      };
+      gitsigns = {
+        enable = true;
+        settings = {
+          current_line_blame = true;
+        };
+      };
+      which-key = {
+        enable = true;
+      };
+      luasnip = {
+        enable = true;
+      };
+      cmp = {
+        enable = true;
+        autoEnableSources = true;
+        settings = {
+          sources = [
+            { name = "nvim_lsp"; }
+            { name = "path"; }
+            { name = "buffer"; }
+            { name = "luasnip"; }
+          ];
+          mapping = {
+            "<C-n>" = "cmp.mapping.select_next_item()";
+            "<C-p>" = "cmp.mapping.select_prev_item()";
+            "<CR>" = "cmp.mapping.confirm({ select = true })";
+            "<C-S-Space>" = "cmp.mapping.complete()";
+          };
+          snippet = {
+             expand = "function(args) require('luasnip').lsp_expand(args.body) end";
+          };
         };
       };
 
@@ -119,6 +170,12 @@
         key = "gl";
         action = ":lua vim.diagnostic.open_float()<CR>";
         options.desc = "Show hover information";
+      }
+      {
+        mode = "n";
+        key = "<leader>rn";
+        action = ":IncRename ";
+        options.desc = "Incremental rename";
       }
       # flash.nvim
       {
