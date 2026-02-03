@@ -86,6 +86,13 @@
           };
         };
       };
+      telescope = {
+        enable = true;
+        keymaps = {
+          "<leader>ff" = "find_files";
+          "<leader>fg" = "live_grep";
+        };
+      };
 
       # Declare plugins below explicitly because they are depended on by other plugins
       # by nvim-tree
