@@ -57,6 +57,12 @@
     ];
     keymaps = [
       {
+        mode = "n";
+        key = "<Esc><Esc>";
+        action = "<cmd>noh<CR>";
+        options.desc = "Clear search highlights";
+      }
+      {
         key = "<leader>e";
         action = "<cmd>NvimTreeToggle<CR>";
       }
