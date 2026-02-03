@@ -7,6 +7,10 @@
   # システムパッケージ
   environment.systemPackages = [ pkgs.vim pkgs.git ];
 
+  fonts.packages = with pkgs; [
+    nerd-fonts.jetbrains-mono
+  ];
+
   # システム設定
   system.primaryUser = "ryosei";
   system.defaults = {
@@ -51,6 +55,7 @@
       "discord"
       "microsoft-teams"
       "jetbrains-toolbox"
+      "alacritty"
     ];
   };
 }

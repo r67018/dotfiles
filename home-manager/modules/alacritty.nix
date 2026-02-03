@@ -1,11 +1,12 @@
-{ config, ... }:
+{ config, pkgs, lib, ... }:
 {
   programs.alacritty = {
     enable = true;
+    package = if pkgs.stdenv.isDarwin then pkgs.runCommand "alacritty-dummy" {} "mkdir $out" else pkgs.alacritty;
     settings = {
       font = {
         normal = {
-          family = "JetBrainsMono NF";
+          family = "JetBrainsMono Nerd Font";
           style = "Light";
         };
         size = 12;
