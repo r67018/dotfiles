@@ -30,6 +30,38 @@
       flash = {
         enable = true;
       };
+      treesitter = {
+        enable = true;
+        settings = {
+          highlight = {
+            enable = true;
+          };
+          indent = {
+            enable = true;
+          };
+          ensure_installed = [
+            "bash"
+            "c"
+            "c_sharp"
+            "cpp"
+            "css"
+            "html"
+            "javascript"
+            "json"
+            "lua"
+            "markdown"
+            "markdown_inline"
+            "nix"
+            "python"
+            "rust"
+            "toml"
+            "typescript"
+            "vim"
+            "vimdoc"
+            "yaml"
+          ];
+        };
+      };
       nvim-autopairs = {
        enable = true;
       };
@@ -43,6 +75,15 @@
         enable = true;
         servers = {
           nil_ls.enable = true;
+        };
+        keymaps = {
+          lspBuf = {
+            gd = "definition";
+            gr = "references";
+            K = "hover";
+            gi = "implementation";
+            gt = "type_definition";
+          };
         };
       };
 
