@@ -27,7 +27,7 @@
           };
         };
       };
-      leap = {
+      flash = {
         enable = true;
       };
       nvim-autopairs = {
@@ -66,21 +66,32 @@
         action = ":lua vim.diagnostic.open_float()<CR>";
         options.desc = "Show hover information";
       }
-      # leap.nvim
+      # flash.nvim
       {
         mode = [ "n" "x" "o" ];
-        key = "<leader>s";
-        action = "<Plug>(leap)";
-        options.desc = "Leap forward";
+        key = "s";
+        action = "<cmd>lua require('flash').jump()<CR>";
+        options.desc = "Flash";
       }
       {
         mode = [ "n" "x" "o" ];
-        key = "<leader>S";
-        action = "<Plug>(leap-anywhere)";
-        options.desc = "Leap across windows";
+        key = "S";
+        action = "<cmd>lua require('flash').treesitter()<CR>";
+        options.desc = "Flash Treesitter";
       }
     ];
     extraConfigLua = ''
+      -- Flash to line
+      local function flash_to_line()
+        require("flash").jump({
+          search = { mode = "search", max_length = 0 },
+          label = { after = { 0, 0 } },
+          pattern = "^\\s*\\zs\\S\\|^\\s*$",
+        })
+      end
+
+      vim.keymap.set({'n', 'x', 'o'}, '<leader>l', flash_to_line, { desc = "Flash to line" })
+
       -- Close nvim-tree when quitting nvim
       vim.api.nvim_create_autocmd({"QuitPre"}, {
         callback = function() vim.cmd("NvimTreeClose") end,
