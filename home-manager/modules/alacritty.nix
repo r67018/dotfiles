@@ -10,6 +10,10 @@
           style = "Light";
         };
         size = 12;
+        offset = {
+          x = 0;
+          y = 2;
+        };
       };
       colors = {
         # Default colors
@@ -41,6 +45,15 @@
           cyan = "#95c4ce";
           white = "#d2d4de";
         };
+      };
+      window = {
+        padding = {
+          x = 4;
+          y = 0;
+        };
+        dynamic_padding = true;
+        opacity = 0.92;
+        blur = true;
       };
     };
   };
