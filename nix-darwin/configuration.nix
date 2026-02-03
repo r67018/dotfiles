@@ -45,7 +45,12 @@
     enable = true;
     casks = [
       "1password"
-      "zen-browser"
+      "zen"
+      "thunderbird"
+      "slack"
+      "discord"
+      "microsoft-teams"
+      "jetbrains-toolbox"
     ];
   };
 }
