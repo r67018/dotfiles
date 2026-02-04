@@ -6,7 +6,6 @@ set smartcase
 set easymotion
 set surround
 set commentary
-set NERDTree
 
 " keymaps
 let mapleader = "\<space>"
@@ -14,32 +13,38 @@ let mapleader = "\<space>"
 " editor
 nmap <CR> o<ESC>
 nmap <S-CR> O<ESC>
-nmap <Leader>r :action Replace<CR>
-vmap <Leader>r :action Replace<CR>
-nmap <Leader>R :action ReplaceInPath<CR>
-vmap <Leader>R :action ReplaceInPath<CR>
-nmap <Leader>f :action Find<CR>
-vmap <Leader>f :action Find<CR>
-nmap <Leader>F :action FindInPath<CR>
-vmap <Leader>F :action FindInPath<CR>
+inoremap <C-[> <Esc>
+nnoremap <Esc><Esc> :nohlsearch<CR>
+nmap <leader>ff <Action>(GotoFile)
+nmap <leader>fg <Action>(FindInPath)
+nmap <leader>e <Action>(ActivateProjectToolWindow)
+nmap <leader>rn <Action>(RenameElement)
+vmap <leader>rn <Action>(RenameElement)
 
 " go to
+nmap gd <Action>(GotoDeclaration)
+nmap gr <Action>(FindUsages)
 nmap gi <Action>(GotoImplementation)
+nmap gt <Action>(GotoTypeDeclaration)
+nmap K <Action>(QuickJavaDoc)
+nmap gl <Action>(ShowErrorDescription)
 
 nmap <Leader>b <Action>(Run)
 nmap <Leader>B <Action>(Debug)
 nmap <Leader>t <Action>(ActivateTerminalToolWindow)
-nmap <Leader>K <Action>(ShowErrorDescription)
 nmap <Leader>k <Action>(ShowHoverInfo)
 nmap <Leader>o <Action>(GotoFile)
-" nmap <Esc> <Action>(HideActiveToolWindow)
+nmap <Esc> <Action>(HideActiveToolWindow)
 
 " plugins
+map s <Plug>(easymotion-s2)
+xmap s <Plug>(easymotion-s2)
+omap s <Plug>(easymotion-s2)
+map S <Plug>(easymotion-bd-jk)
+xmap S <Plug>(easymotion-bd-jk)
+omap S <Plug>(easymotion-bd-jk)
 map <leader>l <Plug>(easymotion-bd-jk)
 xmap <leader>l <Plug>(easymotion-bd-jk)
-map <leader>s <Plug>(easymotion-s2)
-xmap <leader>s <Plug>(easymotion-s2)
 nmap gcc <Action>(CommentByLineComment)
 vmap gc <Action>(CommentByLineComment)
-nmap <leader>e :NERDTreeToggle<CR>
 nmap <Leader>cc <Action>(ActivateGitHubCopilotChatToolWindow)
