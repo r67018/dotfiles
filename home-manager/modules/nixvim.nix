@@ -20,6 +20,7 @@
       nvim-tree = {
         enable = true;
         settings = {
+          sync_root_with_cwd = true;
           actions = {
             open_file = {
               quit_on_open = true; # Close the explorer on file open
@@ -181,6 +182,12 @@
         options.desc = "Show hover information";
       }
       {
+        mode = [ "n" "v" ];
+        key = "<leader>ca";
+        action = ":lua vim.lsp.buf.code_action()<CR>";
+        options.desc = "Code action";
+      }
+      {
         mode = "n";
         key = "<leader>rn";
         action = ":IncRename ";
@@ -254,4 +261,3 @@
     '';
   };
 }
-
