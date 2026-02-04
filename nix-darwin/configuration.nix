@@ -63,6 +63,14 @@
       "jetbrains-toolbox"
       "alacritty"
     ];
+
+    brews = [
+      "mas" # App Store アプリを管理するためのツール
+    ];
+
+    masApps = {
+      "LINE" = 539883307; # LINEのアプリID
+    };
   };
 }
 
