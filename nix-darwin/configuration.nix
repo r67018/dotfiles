@@ -38,6 +38,13 @@
   # キーボード設定
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToControl = true;
+  system.keyboard.userKeyMapping = [
+    {
+      # Left Control -> Left Option
+      HIDKeyboardModifierMappingSrc = 30064771296;
+      HIDKeyboardModifierMappingDst = 30064771298;
+    }
+  ];
 
   # ホスト名・コンピュータ名
   networking.hostName = "greygoose";
