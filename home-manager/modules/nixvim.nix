@@ -66,6 +66,9 @@
       nvim-autopairs = {
        enable = true;
       };
+      nvim-surround = {
+        enable = true;
+      };
       airline = {
         enable = true;
         settings = {
@@ -133,11 +136,15 @@
       luasnip = {
         enable = true;
       };
+      crates = {
+        enable = true;
+      };
       cmp = {
         enable = true;
         autoEnableSources = true;
         settings = {
           sources = [
+            { name = "crates"; }
             { name = "nvim_lsp"; }
             { name = "path"; }
             { name = "buffer"; }
@@ -214,7 +221,7 @@
       }
       {
         mode = [ "n" "x" "o" ];
-        key = "S";
+        key = "<leader>s";
         action = "<cmd>lua require('flash').treesitter()<CR>";
         options.desc = "Flash Treesitter";
       }
