@@ -14,6 +14,8 @@
   # release notes.
   home.stateVersion = "25.05"; # Please read the comment before changing.
 
+  nixpkgs.config.allowUnfree = true;
+
   i18n.inputMethod = lib.mkIf pkgs.stdenv.isLinux {
     enable = true;
     type = "fcitx5";
