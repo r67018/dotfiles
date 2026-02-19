@@ -1,6 +1,6 @@
-{ ... }:
+{ pkgs, lib, ... }:
 {
-  programs.wofi = {
+  programs.wofi = lib.mkIf pkgs.stdenv.isLinux {
     enable = true;
     style = builtins.readFile ./style.css;
     settings = {

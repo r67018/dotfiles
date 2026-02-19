@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
-  programs.waybar = {
+  programs.waybar = lib.mkIf pkgs.stdenv.isLinux {
     enable = true;
     systemd.enable = true;
     style = builtins.readFile ./style.css;

@@ -41,6 +41,9 @@
     ./modules/vscode.nix
     ./modules/alacritty.nix
     ./modules/zen-browser.nix
+    ./modules/sway.nix
+    ./modules/waybar/waybar.nix
+    ./modules/wofi/wofi.nix
   ];
 
   # The home.packages option allows you to install Nix packages into your
