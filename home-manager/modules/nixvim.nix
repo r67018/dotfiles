@@ -54,6 +54,7 @@
             "markdown_inline"
             "nix"
             "python"
+            "ruby"
             "rust"
             "toml"
             "typescript"
@@ -86,6 +87,9 @@
           jsonls.enable = true;
           lua_ls.enable = true;
           pyright.enable = true;
+          ruby_lsp = {
+            enable = true;
+          };
           rust_analyzer = {
             enable = true;
             installCargo = true;
