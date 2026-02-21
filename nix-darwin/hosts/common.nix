@@ -21,10 +21,16 @@
     dock.autohide = true;
     dock.autohide-delay = 0.0;
     dock.autohide-time-modifier = 0.6;
+    dock.show-recents = false;
     trackpad.Clicking = true;
     NSGlobalDomain.InitialKeyRepeat = 15;
     NSGlobalDomain.KeyRepeat = 2;
     NSGlobalDomain."com.apple.keyboard.fnState" = true;
+    NSGlobalDomain.AppleInterfaceStyle = "Dark";
+    dock.persistent-apps = [
+      "/Applications/Alacritty.app"
+      "/Applications/1Password.app"
+    ];
   };
 
   # Keyboard settings

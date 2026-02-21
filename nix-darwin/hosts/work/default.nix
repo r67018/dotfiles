@@ -5,8 +5,11 @@
   system.primaryUser = "r_goto";
   users.users."r_goto".home = "/Users/r_goto";
 
+  system.defaults.dock.persistent-apps = [
+    "/Applications/Slack.app"
+  ];
+
   homebrew.casks = [
     "slack"
-    "microsoft-teams"
   ];
 }
