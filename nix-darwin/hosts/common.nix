@@ -31,7 +31,27 @@
       "/Applications/Alacritty.app"
       "/Applications/1Password.app"
     ];
+    NSGlobalDomain."com.apple.mouse.tapBehavior" = 1;
   };
+
+  system.activationScripts.postActivation.text = ''
+    # Stop the annoying "Application is damaged" or "can't be opened" for downloaded apps
+    echo "Removing quarantine attribute from applications..."
+    apps=(
+      "/Applications/Alacritty.app"
+      "/Applications/Zen Browser.app"
+      "/Applications/Discord.app"
+      "/Applications/Slack.app"
+      "/Applications/Microsoft Teams.app"
+      "/Applications/1Password.app"
+    )
+    
+    for app in "''${apps[@]}"; do
+      if [ -e "$app" ]; then
+        xattr -d com.apple.quarantine "$app" 2>/dev/null || true
+      fi
+    done
+  '';
 
   # Keyboard settings
   system.keyboard.enableKeyMapping = true;
