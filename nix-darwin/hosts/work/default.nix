@@ -12,4 +12,7 @@
   homebrew.casks = [
     "slack"
   ];
+  
+  # Reset key mapping for JIS keyboard
+  system.keyboard.userKeyMapping = [];
 }
