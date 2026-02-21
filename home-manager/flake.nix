@@ -23,12 +23,20 @@
   };
 
   outputs =
-    { nixpkgs, home-manager, zen-browser, nixvim, ... } @ inputs:
+    { self, nixpkgs, home-manager, zen-browser, nixvim, ... } @ inputs:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
     in
     {
+      # Export modules for reuse
+      homeManagerModules = {
+        common = import ./hosts/common.nix;
+        personal = import ./hosts/personal/default.nix;
+        work = import ./hosts/work/default.nix;
+        linux-desktop = import ./hosts/linux-desktop/default.nix;
+      };
+
       homeConfigurations."ryosei" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
 
@@ -40,12 +48,35 @@
 
         # Optionally use extraSpecialArgs
         # to pass through arguments to home.nix
-	extraSpecialArgs = { inherit inputs; };
+        extraSpecialArgs = { inherit inputs; };
       };
 
-      darwinModules.default = {
-          home-manager.users.ryosei = import ./home.nix;
+      darwinModules = {
+        # Default (Personal Mac)
+        default = {
+          home-manager.users.ryosei = {
+             home.username = "ryosei";
+             home.homeDirectory = "/Users/ryosei";
+             imports = [
+               self.homeManagerModules.common
+               self.homeManagerModules.personal
+             ];
+          };
           home-manager.extraSpecialArgs = { inherit inputs; };
+        };
+
+        # Work Mac
+        work = {
+          home-manager.users.r_goto = {
+             home.username = "r_goto";
+             home.homeDirectory = "/Users/r_goto";
+             imports = [
+               self.homeManagerModules.common
+               self.homeManagerModules.work
+             ];
+          };
+          home-manager.extraSpecialArgs = { inherit inputs; };
+        };
       };
     };
 }

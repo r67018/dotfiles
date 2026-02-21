@@ -1,10 +1,9 @@
 { pkgs, ... }: {
-  # Determine Installer との衝突を避けるための設定
+  # Determine Installer collision
   nix.enable = false;
-  # 実験的機能の有効化
   nix.settings.experimental-features = "nix-command flakes";
 
-  # システムパッケージ
+  # System packages
   environment.systemPackages = [ pkgs.vim pkgs.git ];
 
   fonts.packages = with pkgs; [
@@ -15,71 +14,48 @@
     newcomputermodern
   ];
 
-  # システム設定
-  system.primaryUser = "ryosei";
+  # System defaults
   system.defaults = {
-    # ファインダーのタイトルにPOSIXパスを表示
     finder._FXShowPosixPathInTitle = true;
-    # 拡張子を表示する
     finder.AppleShowAllExtensions = true;
-    # ドックを爆速で隠し、画面を広く使う
     dock.autohide = true;
     dock.autohide-delay = 0.0;
     dock.autohide-time-modifier = 0.6;
-    # タップでクリック
     trackpad.Clicking = true;
-    # キーリピートを最速にする
-    NSGlobalDomain.InitialKeyRepeat = 15; # 15が標準の最小値
-    NSGlobalDomain.KeyRepeat = 2; # 2が標準の最小値
-    # ファンクションキーを標準のファンクションキーとして使用
+    NSGlobalDomain.InitialKeyRepeat = 15;
+    NSGlobalDomain.KeyRepeat = 2;
     NSGlobalDomain."com.apple.keyboard.fnState" = true;
   };
 
-  # キーボード設定
+  # Keyboard settings
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToControl = true;
   system.keyboard.userKeyMapping = [
     {
-      # Left Control -> Left Option
       HIDKeyboardModifierMappingSrc = 30064771296;
       HIDKeyboardModifierMappingDst = 30064771298;
     }
   ];
-
-  # ホスト名・コンピュータ名
-  networking.hostName = "greygoose";
-  networking.computerName = "greygoose";
-
-  # ユーザー設定
-  users.users."ryosei".home = "/Users/ryosei";
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
   
   system.stateVersion = 5; 
 
+  # Homebrew
   homebrew = {
     enable = true;
     casks = [
       "1password"
-      "zen"
-      "thunderbird"
-      "slack"
-      "discord"
-      "microsoft-teams"
-      "jetbrains-toolbox"
       "alacritty"
+      "jetbrains-toolbox"
     ];
-
     brews = [
-      "mas" # App Store アプリを管理するためのツール
+      "mas"
     ];
-
-    masApps = {
-      "LINE" = 539883307; # LINEのアプリID
-    };
   };
 
+  # Aerospace
   services.aerospace = {
     enable = true;
     settings = {
@@ -96,7 +72,7 @@
       ];
       mode.main.binding = {
         "alt-enter" = "exec-and-forget open -n -a Alacritty";
-        "alt-d" = "exec-and-forget /bin/bash -c 'sleep 0.1 && osascript -e \"tell application \\\"System Events\\\" to keystroke space using command down\"'";
+        "alt-d" = "exec-and-forget /bin/bash -c 'sleep 0.1 && osascript -e \"tell application \\\"System Events\\\" to keystroke space using command down\"'" ;
         "alt-q" = "close";
         "alt-h" = "focus left";
         "alt-j" = "focus down";
@@ -125,11 +101,11 @@
         "alt-shift-8" = "move-node-to-workspace 8";
         "alt-shift-9" = "move-node-to-workspace 9";
         "alt-f" = "fullscreen";
-        "alt-s" = "layout v_accordion"; # mimic stacking
-        "alt-w" = "layout h_accordion"; # mimic tabbed
-        "alt-e" = "layout tiles horizontal vertical"; # toggle split
-        "alt-b" = "layout tiles horizontal"; # split horizontal (sway style)
-        "alt-v" = "layout tiles vertical"; # split vertical (sway style)
+        "alt-s" = "layout v_accordion";
+        "alt-w" = "layout h_accordion";
+        "alt-e" = "layout tiles horizontal vertical";
+        "alt-b" = "layout tiles horizontal";
+        "alt-v" = "layout tiles vertical";
         "alt-shift-space" = "layout floating tiling";
         "alt-r" = "mode resize";
       };
@@ -144,4 +120,3 @@
     };
   };
 }
-

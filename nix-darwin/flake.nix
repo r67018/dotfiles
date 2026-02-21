@@ -7,7 +7,7 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs";
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    my-home.url = "../home-manager";
+    my-home.url = "path:../home-manager";
   };
 
   outputs =
@@ -23,17 +23,30 @@
           system = "aarch64-darwin";
           # specialArgs = { inherit inputs; };
           modules = [
-            ./configuration.nix
+            ./hosts/common.nix
+            ./hosts/greygoose/default.nix
             home-manager.darwinModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
-
-              # Optionally, use home-manager.extraSpecialArgs to pass
-              # arguments to home.nix
             }
             my-home.darwinModules.default
+          ];
+        };
+        
+        "work" = darwin.lib.darwinSystem {
+          system = "aarch64-darwin";
+          modules = [
+            ./hosts/common.nix
+            ./hosts/work/default.nix
+            home-manager.darwinModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "backup";
+            }
+            my-home.darwinModules.work
           ];
         };
       };
