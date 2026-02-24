@@ -120,6 +120,16 @@
         "alt-shift-7" = "move-node-to-workspace 7";
         "alt-shift-8" = "move-node-to-workspace 8";
         "alt-shift-9" = "move-node-to-workspace 9";
+        
+        # Multi-monitor and workspace management
+        "alt-tab" = "workspace-back-and-forth";
+        "alt-comma" = "focus-monitor prev --wrap-around";
+        "alt-period" = "focus-monitor next --wrap-around";
+        "alt-shift-comma" = "move-node-to-monitor prev --wrap-around";
+        "alt-shift-period" = "move-node-to-monitor next --wrap-around";
+        "alt-ctrl-comma" = "move-workspace-to-monitor prev --wrap-around";
+        "alt-ctrl-period" = "move-workspace-to-monitor next --wrap-around";
+
         "alt-f" = "fullscreen";
         "alt-s" = "layout v_accordion";
         "alt-w" = "layout h_accordion";
