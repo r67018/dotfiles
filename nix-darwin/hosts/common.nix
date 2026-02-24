@@ -56,6 +56,12 @@
   # Keyboard settings
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToControl = true;
+  system.keyboard.userKeyMapping = [
+    {
+      HIDKeyboardModifierMappingSrc = 30064771296;
+      HIDKeyboardModifierMappingDst = 30064771298;
+    }
+  ];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;

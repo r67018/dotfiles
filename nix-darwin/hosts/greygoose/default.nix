@@ -25,11 +25,4 @@
   homebrew.masApps = {
     "LINE" = 539883307;
   };
-
-  system.keyboard.userKeyMapping = [
-    {
-      HIDKeyboardModifierMappingSrc = 30064771296;
-      HIDKeyboardModifierMappingDst = 30064771298;
-    }
-  ];
 }
