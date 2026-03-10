@@ -27,6 +27,7 @@
     jq
     sops
     gemini-cli
+    inputs.claude-code.packages.${pkgs.system}.claude-code
 
     # Dev tools
     python3
