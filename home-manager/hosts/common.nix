@@ -17,6 +17,7 @@
     ../modules/nixvim.nix
     ../modules/vscode.nix
     ../modules/alacritty.nix
+    ../modules/github-copilot-cli.nix
   ];
 
   # Common packages
@@ -43,9 +44,6 @@
   # GitHub CLI
   programs.gh = {
     enable = true;
-    extensions = with pkgs; [
-      github-copilot-cli
-    ];
   };
 
   # Secret files
