@@ -11,6 +11,7 @@
 
   homebrew.casks = [
     "slack"
+    "postman"
   ];
   
   # Reset key mapping for JIS keyboard
