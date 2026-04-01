@@ -75,6 +75,7 @@
     casks = [
       "1password"
       "alacritty"
+      "claude"
       "jetbrains-toolbox"
     ];
     brews = [
