@@ -29,7 +29,7 @@
     NSGlobalDomain."com.apple.keyboard.fnState" = true;
     NSGlobalDomain.AppleInterfaceStyle = "Dark";
     dock.persistent-apps = [
-      "/Applications/Alacritty.app"
+      "/Applications/kitty.app"
       "/Applications/1Password.app"
     ];
     NSGlobalDomain."com.apple.mouse.tapBehavior" = 1;
@@ -39,7 +39,7 @@
     # Stop the annoying "Application is damaged" or "can't be opened" for downloaded apps
     echo "Removing quarantine attribute from applications..."
     apps=(
-      "/Applications/Alacritty.app"
+      "/Applications/kitty.app"
       "/Applications/Zen Browser.app"
       "/Applications/Discord.app"
       "/Applications/Slack.app"
@@ -74,7 +74,7 @@
     enable = true;
     casks = [
       "1password"
-      "alacritty"
+      "kitty"
       "claude"
       "jetbrains-toolbox"
     ];
@@ -99,7 +99,7 @@
         { "if".app-id = "com.1password.1password"; run = "layout floating"; }
       ];
       mode.main.binding = {
-        "alt-enter" = "exec-and-forget open -n -a Alacritty";
+        "alt-enter" = "exec-and-forget open -n -a kitty";
         "alt-d" = "exec-and-forget /bin/bash -c 'sleep 0.1 && osascript -e \"tell application \\\"System Events\\\" to keystroke space using command down\"'" ;
         "alt-q" = "close";
         "alt-h" = "focus left";

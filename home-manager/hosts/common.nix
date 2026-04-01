@@ -16,7 +16,7 @@
     ../modules/bat.nix
     ../modules/nixvim.nix
     ../modules/vscode.nix
-    ../modules/alacritty.nix
+    ../modules/kitty.nix
     ../modules/github-copilot-cli.nix
   ];
 
@@ -39,7 +39,7 @@
 
   # Common environment variables
   home.sessionVariables = {
-    TERMINAL = "alacritty";
+    TERMINAL = "kitty";
   };
 
   # GitHub CLI
