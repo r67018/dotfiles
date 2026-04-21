@@ -31,7 +31,6 @@
 
     # Dev tools
     python3
-    dotnet-sdk_10
     nil # Nix language server
     typst
     tinymist # Typst
