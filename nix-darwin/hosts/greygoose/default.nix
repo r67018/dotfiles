@@ -20,6 +20,7 @@
     "discord"
     "slack"
     "microsoft-teams"
+    "cloudflare-warp"
   ];
 
   homebrew.masApps = {
