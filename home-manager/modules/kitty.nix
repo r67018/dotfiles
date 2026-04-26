@@ -49,7 +49,7 @@
       "super+7" = "goto_tab 7";
       "super+8" = "goto_tab 8";
       "super+9" = "goto_tab 9";
-      "ctrl+w" = "close_tab";
+      "ctrl+w" = "send_text all \\x17";
     };
   };
 
