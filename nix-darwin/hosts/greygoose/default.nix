@@ -6,12 +6,17 @@
   users.users."ryosei".home = "/Users/ryosei";
 
   system.defaults.dock.persistent-apps = [
-    "/Applications/Zen Browser.app"
+    "/Applications/Google Chrome.app"
+    "/Applications/kitty.app"
+    "/Applications/1Password.app"
     "/Applications/Thunderbird.app"
     "/Applications/Discord.app"
-    "/Applications/LINE.app"
     "/Applications/Slack.app"
     "/Applications/Microsoft Teams.app"
+    "/Applications/LINE.app"
+    "/Applications/Notion.app"
+    "/Applications/Claude.app"
+    "/Applications/Gemini.app"
   ];
 
   homebrew.casks = [
