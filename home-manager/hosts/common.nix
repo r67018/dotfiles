@@ -28,6 +28,7 @@
     sops
     gemini-cli
     inputs.claude-code.packages.${pkgs.system}.claude-code
+    inputs.codex-cli.packages.${pkgs.system}.codex
 
     # Dev tools
     python3
