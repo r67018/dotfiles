@@ -1,4 +1,4 @@
-{ pkgs, ... }: {
+{ lib, pkgs, ... }: {
   # Determine Installer collision
   nix.enable = false;
   nix.settings.experimental-features = "nix-command flakes";
@@ -28,7 +28,7 @@
     NSGlobalDomain.KeyRepeat = 2;
     NSGlobalDomain."com.apple.keyboard.fnState" = true;
     NSGlobalDomain.AppleInterfaceStyle = "Dark";
-    dock.persistent-apps = [
+    dock.persistent-apps = lib.mkDefault [
       "/Applications/kitty.app"
       "/Applications/1Password.app"
     ];
