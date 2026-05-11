@@ -45,6 +45,7 @@
       "/Applications/Slack.app"
       "/Applications/Microsoft Teams.app"
       "/Applications/1Password.app"
+      "/Applications/ChatGPT.app"
     )
     
     for app in "''${apps[@]}"; do
@@ -66,6 +67,7 @@
       "1password"
       "kitty"
       "claude"
+      "chatgpt"
       "jetbrains-toolbox"
     ];
     brews = [
