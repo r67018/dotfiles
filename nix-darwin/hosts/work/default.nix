@@ -1,4 +1,4 @@
-{ ... }: {
+{ lib, ... }: {
   networking.hostName = "r-gotonoMacBook-Air";
   networking.computerName = "r-gotonoMacBook-Air";
 
@@ -17,6 +17,7 @@
     "postman"
   ];
   
-  # Reset key mapping for JIS keyboard
-  system.keyboard.userKeyMapping = [];
+  # Disable shared key remaps on work profile
+  system.keyboard.remapCapsLockToControl = lib.mkForce false;
+  system.keyboard.userKeyMapping = lib.mkForce [];
 }

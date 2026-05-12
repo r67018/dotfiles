@@ -5,6 +5,16 @@
   system.primaryUser = "ryosei";
   users.users."ryosei".home = "/Users/ryosei";
 
+  # Keyboard settings
+  system.keyboard.enableKeyMapping = true;
+  system.keyboard.remapCapsLockToControl = true;
+  system.keyboard.userKeyMapping = [
+    {
+      HIDKeyboardModifierMappingSrc = 30064771296;
+      HIDKeyboardModifierMappingDst = 30064771298;
+    }
+  ];
+
   system.defaults.dock.persistent-apps = [
     "/Applications/Google Chrome.app"
     "/Applications/kitty.app"
