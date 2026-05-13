@@ -23,6 +23,10 @@ in
     '';
   };
 
+  # This file is intentionally copied from the HM symlink below. Allow HM to
+  # replace an existing regular file on subsequent activations.
+  home.file.".ssh/config".force = true;
+
   # Fix "Bad owner or permissions on ~/.ssh/config" by converting symlink to file
   home.activation.fixSshConfigPermissions = lib.hm.dag.entryAfter ["writeBoundary"] ''
     if [ -L "${config.home.homeDirectory}/.ssh/config" ]; then
@@ -33,4 +37,3 @@ in
     fi
   '';
 }
-
