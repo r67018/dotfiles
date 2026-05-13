@@ -108,6 +108,7 @@
                 home.homeDirectory = "/Users/r_goto";
                 imports = [
                   homeManagerModules.common
+                  homeManagerModules.personal
                   homeManagerModules.work
                 ];
               };
