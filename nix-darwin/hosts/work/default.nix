@@ -15,7 +15,11 @@
     "zen"
     "slack"
     "postman"
+    "google-gemini"
+    "openvpn-connect"
   ];
+
+  homebrew.onActivation.autoUpdate = true;
   
   # Disable shared key remaps on work profile
   system.keyboard.remapCapsLockToControl = lib.mkForce false;
