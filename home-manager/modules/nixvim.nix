@@ -12,8 +12,8 @@
       relativenumber = true;
       autoindent = true;
       smartindent = true;
-      shiftwidth = 2;
-      tabstop = 2;
+      shiftwidth = 4;
+      tabstop = 4;
       expandtab = true;
     };
     plugins = {
@@ -102,17 +102,18 @@
         keymaps = {
           lspBuf = {
             gd = "definition";
+            gD = "declaration";
             gr = "references";
             K = "hover";
             gi = "implementation";
-            gt = "type_definition";
+            gy = "type_definition";
           };
         };
       };
       telescope = {
         enable = true;
         keymaps = {
-          "<leader>ff" = "find_files";
+          "," = "find_files";
           "<leader>fg" = "live_grep";
         };
       };
@@ -200,21 +201,33 @@
       }
       {
         mode = "n";
+        key = "<leader>ch";
+        action = "<cmd>LspClangdSwitchSourceHeader<CR>";
+        options.desc = "Switch source/header";
+      }
+      {
+        mode = "n";
         key = "<leader>rn";
         action = ":IncRename ";
         options.desc = "Incremental rename";
       }
       {
-        mode = [ "n" "t" ];
+        mode = "n";
         key = "<leader>t";
-        action = "<cmd>ToggleTerm direction=float<CR>";
+        action = "<cmd>ToggleTerm direction=float<CR><cmd>lua vim.defer_fn(function() if vim.bo.buftype == 'terminal' then vim.cmd('startinsert!') end end, 20)<CR>";
         options.desc = "Toggle floating terminal";
       }
       {
+        mode = "n";
+        key = "<leader>T";
+        action = "<cmd>ToggleTerm direction=tab<CR><cmd>lua vim.defer_fn(function() if vim.bo.buftype == 'terminal' then vim.cmd('startinsert!') end end, 20)<CR>";
+        options.desc = "Toggle terminal tab";
+      }
+      {
         mode = "t";
-        key = "<Esc>";
-        action = "<C-\\><C-n>";
-        options.desc = "Exit terminal mode";
+        key = "<C-[>";
+        action = "<C-\\><C-n><cmd>ToggleTerm direction=float<CR>";
+        options.desc = "Close floating terminal";
       }
       # flash.nvim
       {
@@ -250,15 +263,6 @@
       -- Close nvim-tree when quitting nvim
       vim.api.nvim_create_autocmd({"QuitPre"}, {
         callback = function() vim.cmd("NvimTreeClose") end,
-      })
-
-      -- C/C++ indentation
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = { "c", "cpp" },
-        callback = function()
-          vim.opt_local.shiftwidth = 4
-          vim.opt_local.tabstop = 4
-        end,
       })
 
       -- Close nvim-tree automatically on focus lost
