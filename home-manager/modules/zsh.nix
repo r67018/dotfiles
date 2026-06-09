@@ -7,9 +7,9 @@
       vi = "nvim";
       vim = "nvim";
     } // (if pkgs.stdenv.isDarwin then {
-      ls = "ls -G";
-      ll = "ls -alFG";
-      la = "ls -AG";
+      ls = "/bin/ls -G";
+      ll = "/bin/ls -alFG";
+      la = "/bin/ls -AG";
       c = "pbcopy";
       p = "pbpaste";
     } else {
