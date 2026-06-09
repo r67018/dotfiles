@@ -1,4 +1,8 @@
-{ lib, pkgs, ... }: {
+{ config, lib, pkgs, ... }:
+let
+  primaryUser = config.system.primaryUser;
+in
+{
   # Determine Installer collision
   nix.enable = false;
   nix.settings.experimental-features = "nix-command flakes";
@@ -33,9 +37,60 @@
       "/Applications/1Password.app"
     ];
     NSGlobalDomain."com.apple.mouse.tapBehavior" = 1;
+    CustomUserPreferences."com.apple.HIToolbox" = {
+      AppleCurrentKeyboardLayoutInputSourceID = "com.apple.keylayout.ABC";
+      AppleEnabledInputSources = [
+        {
+          InputSourceKind = "Keyboard Layout";
+          "KeyboardLayout ID" = 252;
+          "KeyboardLayout Name" = "ABC";
+        }
+        {
+          "Bundle ID" = "com.google.inputmethod.Japanese";
+          "Input Mode" = "com.apple.inputmethod.Japanese";
+          InputSourceKind = "Input Mode";
+        }
+        {
+          "Bundle ID" = "com.apple.CharacterPaletteIM";
+          InputSourceKind = "Non Keyboard Input Method";
+        }
+        {
+          "Bundle ID" = "com.apple.50onPaletteIM";
+          InputSourceKind = "Non Keyboard Input Method";
+        }
+        {
+          "Bundle ID" = "com.apple.PressAndHold";
+          InputSourceKind = "Non Keyboard Input Method";
+        }
+      ];
+      AppleInputSourceHistory = [
+        {
+          "Bundle ID" = "com.google.inputmethod.Japanese";
+          "Input Mode" = "com.apple.inputmethod.Japanese";
+          InputSourceKind = "Input Mode";
+        }
+        {
+          InputSourceKind = "Keyboard Layout";
+          "KeyboardLayout ID" = 252;
+          "KeyboardLayout Name" = "ABC";
+        }
+      ];
+      AppleSelectedInputSources = [
+        {
+          "Bundle ID" = "com.google.inputmethod.Japanese";
+          "Input Mode" = "com.apple.inputmethod.Japanese";
+          InputSourceKind = "Input Mode";
+        }
+      ];
+    };
   };
 
   system.activationScripts.postActivation.text = ''
+    # Make Ctrl-Space cycle input sources instead of using the history-based
+    # "previous input source" action, which can become one-way with Google IME.
+    sudo -u "${primaryUser}" /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 '{ enabled = 0; value = { parameters = (32, 49, 262144); type = standard; }; }'
+    sudo -u "${primaryUser}" /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 '{ enabled = 1; value = { parameters = (32, 49, 262144); type = standard; }; }'
+
     # Stop the annoying "Application is damaged" or "can't be opened" for downloaded apps
     echo "Removing quarantine attribute from applications..."
     apps=(
@@ -68,6 +123,7 @@
       "kitty"
       "claude"
       "chatgpt"
+      "google-japanese-ime"
       "jetbrains-toolbox"
     ];
     brews = [
