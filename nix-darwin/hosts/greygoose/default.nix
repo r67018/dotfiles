@@ -26,6 +26,7 @@
     "/Applications/LINE.app"
     "/Applications/Notion.app"
     "/Applications/Claude.app"
+    "/Applications/Codex.app"
     "/Applications/Gemini.app"
   ];
 
@@ -36,6 +37,7 @@
     "slack"
     "microsoft-teams"
     "cloudflare-warp"
+    "codex-app"
   ];
 
   homebrew.masApps = {
