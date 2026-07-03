@@ -60,6 +60,7 @@
       # Shared Home Manager modules from the old home-manager/flake.nix
       homeManagerModules = {
         common = import ./home-manager/hosts/common.nix;
+        greygoose = import ./home-manager/hosts/greygoose/default.nix;
         personal = import ./home-manager/hosts/personal/default.nix;
         work = import ./home-manager/hosts/work/default.nix;
         linux-desktop = import ./home-manager/hosts/linux-desktop/default.nix;
@@ -84,6 +85,7 @@
                 home.homeDirectory = "/Users/ryosei";
                 imports = [
                   homeManagerModules.common
+                  homeManagerModules.greygoose
                   homeManagerModules.personal
                 ];
               };
