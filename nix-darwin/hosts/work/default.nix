@@ -17,6 +17,7 @@
     "postman"
     "google-gemini"
     "openvpn-connect"
+    "codex-app"
   ];
 
   homebrew.onActivation.autoUpdate = true;
