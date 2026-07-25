@@ -154,7 +154,11 @@ in
         { "if".app-id = "com.1password.1password"; run = "layout floating"; }
       ];
       mode.main.binding = {
-        "alt-enter" = "exec-and-forget open -n -a kitty";
+        # `open -n` alone spawns a fully separate kitty app per window, so every
+        # window ends up as its own entry in the cmd-tab app switcher.
+        # --single-instance makes the new process hand off to the running kitty,
+        # which opens a new OS window inside it instead.
+        "alt-enter" = "exec-and-forget /bin/bash -c 'open -na kitty --args --single-instance --directory ~'";
         "alt-d" = "exec-and-forget /bin/bash -c 'sleep 0.1 && osascript -e \"tell application \\\"System Events\\\" to keystroke space using command down\"'" ;
         "alt-q" = "close";
         "alt-h" = "focus left";

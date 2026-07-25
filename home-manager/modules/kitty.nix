@@ -53,6 +53,14 @@
     };
   };
 
+  # Launching kitty from the Dock, Spotlight or Finder goes through macOS launch
+  # services, which can't be given CLI flags. Without --single-instance here that
+  # launch becomes a second, unrelated kitty app alongside the one Aerospace
+  # spawns, and both show up separately when cycling apps with cmd-tab.
+  xdg.configFile."kitty/macos-launch-services-cmdline" = lib.mkIf pkgs.stdenv.isDarwin {
+    text = "--single-instance\n";
+  };
+
   xdg.configFile."kitty/tab_bar.py".text = ''
     from kitty.fast_data_types import Screen
     from kitty.tab_bar import DrawData, ExtraData, TabBarData, as_rgb
