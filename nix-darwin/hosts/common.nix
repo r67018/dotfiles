@@ -156,9 +156,17 @@ in
       mode.main.binding = {
         # `open -n` alone spawns a fully separate kitty app per window, so every
         # window ends up as its own entry in the cmd-tab app switcher.
-        # --single-instance makes the new process hand off to the running kitty,
-        # which opens a new OS window inside it instead.
-        "alt-enter" = "exec-and-forget /bin/bash -c 'open -na kitty --args --single-instance --directory ~'";
+        # --single-instance makes the new invocation hand off to the running
+        # kitty, which opens a new OS window inside it instead.
+        #
+        # Two launchers because neither one does both jobs. `open` goes through
+        # launch services, which drops --directory once kitty is already running
+        # and leaves the new window in /; exec'ing the binary keeps --directory,
+        # and that process exits as soon as it has handed off. But a cold start
+        # has to go through `open`, or the long-lived kitty inherits Aerospace's
+        # launchd process group and every terminal dies whenever the Aerospace
+        # agent restarts (e.g. on darwin-rebuild switch).
+        "alt-enter" = "exec-and-forget /bin/bash -c 'if /usr/bin/pgrep -qx kitty; then /Applications/kitty.app/Contents/MacOS/kitty --single-instance --directory ~; else open -na kitty --args --single-instance --directory ~; fi'";
         "alt-d" = "exec-and-forget /bin/bash -c 'sleep 0.1 && osascript -e \"tell application \\\"System Events\\\" to keystroke space using command down\"'" ;
         "alt-q" = "close";
         "alt-h" = "focus left";

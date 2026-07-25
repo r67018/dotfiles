@@ -56,9 +56,12 @@
   # Launching kitty from the Dock, Spotlight or Finder goes through macOS launch
   # services, which can't be given CLI flags. Without --single-instance here that
   # launch becomes a second, unrelated kitty app alongside the one Aerospace
-  # spawns, and both show up separately when cycling apps with cmd-tab.
+  # spawns, and both show up separately when cycling apps with cmd-tab. Launch
+  # services also hands the app / as its working directory, so --directory is
+  # needed too or that first window opens at the filesystem root. The path has to
+  # be spelled out: kitty splits this file with shell syntax but does not expand ~.
   xdg.configFile."kitty/macos-launch-services-cmdline" = lib.mkIf pkgs.stdenv.isDarwin {
-    text = "--single-instance\n";
+    text = "--single-instance --directory ${config.home.homeDirectory}\n";
   };
 
   xdg.configFile."kitty/tab_bar.py".text = ''
