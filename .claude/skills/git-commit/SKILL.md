@@ -28,7 +28,13 @@ What to stop on:
 
 High-entropy strings that merely *look* like keys, obvious placeholders
 (`YOUR_API_KEY_HERE`, `xxxx`), test fixtures, and public identifiers (client IDs, public
-keys) are not secrets — mention them if unsure, but don't block on them.
+keys) are not secrets — don't block on them.
+
+**When the diff is clean, say nothing about the scan.** No "機密情報はありませんでした",
+no "✅ secrets check passed", no mention of having looked. The check is silent by default;
+it only ever produces output when something is actually found. If a borderline case is
+genuinely worth a second opinion, raise that one item in a sentence — but never report a
+clean result.
 
 How to warn:
 
