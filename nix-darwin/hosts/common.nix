@@ -1,6 +1,73 @@
 { config, lib, pkgs, ... }:
 let
   primaryUser = config.system.primaryUser;
+
+  # Exactly two input sources in the menu: macOS' own ABC for the alphabet and
+  # Google 日本語入力's ひらがな for Japanese. Google IME also ships a 英数
+  # (Roman) mode that duplicates what ABC already does, so keeping it only adds
+  # a third stop to the Ctrl-Space cycle.
+  #
+  # The palette entries at the end aren't user-visible input sources; macOS
+  # keeps them enabled by itself. They are listed so this stays byte-for-byte
+  # the list the system actually stores, which is what lets the login agent
+  # below compare against it.
+  enabledInputSources = [
+    {
+      InputSourceKind = "Keyboard Layout";
+      "KeyboardLayout ID" = 252;
+      "KeyboardLayout Name" = "ABC";
+    }
+    {
+      "Bundle ID" = "com.google.inputmethod.Japanese";
+      "Input Mode" = "com.apple.inputmethod.Japanese";
+      InputSourceKind = "Input Mode";
+    }
+    {
+      "Bundle ID" = "com.apple.CharacterPaletteIM";
+      InputSourceKind = "Non Keyboard Input Method";
+    }
+    {
+      "Bundle ID" = "com.apple.50onPaletteIM";
+      InputSourceKind = "Non Keyboard Input Method";
+    }
+    {
+      "Bundle ID" = "com.apple.PressAndHold";
+      InputSourceKind = "Non Keyboard Input Method";
+    }
+  ];
+
+  # Google IME enables every input mode its bundle ships with whenever it is
+  # installed, and it updates itself in the background through Google's own
+  # keystone agent — outside Homebrew, so no darwin-rebuild is involved. That is
+  # how 英数 keeps coming back: the declarative write below only runs at
+  # activation, while the re-add can happen any time and first becomes visible
+  # at the next login. So re-assert the list at every login too.
+  enforceInputSources = pkgs.writeShellScript "enforce-input-sources" ''
+    want=$(${pkgs.jq}/bin/jq -cS . ${
+      pkgs.writeText "enabled-input-sources.json" (builtins.toJSON enabledInputSources)
+    })
+    have=$(/usr/bin/defaults export com.apple.HIToolbox - \
+      | /usr/bin/plutil -extract AppleEnabledInputSources json -o - - 2>/dev/null \
+      | ${pkgs.jq}/bin/jq -cS . 2>/dev/null) || have=
+
+    if [ "$want" = "$have" ]; then
+      exit 0
+    fi
+
+    /usr/bin/defaults write com.apple.HIToolbox AppleEnabledInputSources "$(< ${
+      pkgs.writeText "enabled-input-sources.plist"
+        (lib.generators.toPlist { escape = true; } enabledInputSources)
+    })"
+
+    # Writing the preference directly skips the notification the Text Input
+    # Services API would have posted, so anything already running keeps serving
+    # the list it read at startup. Post it by hand, and restart the menu bar
+    # item too in case it read the list before this agent got to run.
+    # (`launchctl kickstart` is not an option here: SIP refuses it for Apple's
+    # own agents.)
+    /usr/bin/osascript -l JavaScript -e 'ObjC.import("Foundation"); $.NSDistributedNotificationCenter.defaultCenter.postNotificationNameObjectUserInfoDeliverImmediately("AppleEnabledInputSourcesChangedNotification", $(), $(), true)' > /dev/null
+    /usr/bin/killall TextInputMenuAgent 2>/dev/null || true
+  '';
 in
 {
   # Determine Installer collision
@@ -49,30 +116,7 @@ in
     dock.expose-group-apps = true;
     CustomUserPreferences."com.apple.HIToolbox" = {
       AppleCurrentKeyboardLayoutInputSourceID = "com.apple.keylayout.ABC";
-      AppleEnabledInputSources = [
-        {
-          InputSourceKind = "Keyboard Layout";
-          "KeyboardLayout ID" = 252;
-          "KeyboardLayout Name" = "ABC";
-        }
-        {
-          "Bundle ID" = "com.google.inputmethod.Japanese";
-          "Input Mode" = "com.apple.inputmethod.Japanese";
-          InputSourceKind = "Input Mode";
-        }
-        {
-          "Bundle ID" = "com.apple.CharacterPaletteIM";
-          InputSourceKind = "Non Keyboard Input Method";
-        }
-        {
-          "Bundle ID" = "com.apple.50onPaletteIM";
-          InputSourceKind = "Non Keyboard Input Method";
-        }
-        {
-          "Bundle ID" = "com.apple.PressAndHold";
-          InputSourceKind = "Non Keyboard Input Method";
-        }
-      ];
+      AppleEnabledInputSources = enabledInputSources;
       AppleInputSourceHistory = [
         {
           "Bundle ID" = "com.google.inputmethod.Japanese";
@@ -92,6 +136,15 @@ in
           InputSourceKind = "Input Mode";
         }
       ];
+    };
+  };
+
+  # wait4path because /nix is a separate volume that isn't mounted yet this
+  # early in login.
+  launchd.user.agents.input-sources = {
+    serviceConfig = {
+      ProgramArguments = [ "/bin/sh" "-c" "/bin/wait4path /nix/store && exec ${enforceInputSources}" ];
+      RunAtLoad = true;
     };
   };
 
