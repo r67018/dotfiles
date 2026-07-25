@@ -44,6 +44,9 @@ in
       "/Applications/1Password.app"
     ];
     NSGlobalDomain."com.apple.mouse.tapBehavior" = 1;
+    # Aerospace tiles windows edge to edge, which Mission Control otherwise
+    # renders as an unreadable pile of overlapping thumbnails.
+    dock.expose-group-apps = true;
     CustomUserPreferences."com.apple.HIToolbox" = {
       AppleCurrentKeyboardLayoutInputSourceID = "com.apple.keylayout.ABC";
       AppleEnabledInputSources = [
