@@ -1,11 +1,42 @@
 ---
 name: git-commit
-description: Use when the user asks to commit changes, amend a commit, or fix up the previous commit — "コミットして", "commit this", "直前のコミットを直して", "amendして", "fixupして". Encodes this user's personal policy for choosing between a new commit and amending the previous one; always default to a new commit unless the user explicitly asks to amend.
+description: Use when the user asks to commit changes, amend a commit, or fix up the previous commit — "コミットして", "commit this", "直前のコミットを直して", "amendして", "fixupして". Encodes this user's personal policy for choosing between a new commit and amending the previous one, and for splitting a diff that contains several unrelated changes into one commit per change; always default to a new commit unless the user explicitly asks to amend.
 ---
 
 # Git Commit Policy
 
 **Default: always create a new commit.** Even if the current change looks like it "belongs with" the previous commit (same files, made minutes apart), do not amend on your own judgment — commit new, or ask if genuinely unsure what the user wants.
+
+## One commit per logical change
+
+**Before committing, read the full diff and check whether it contains more than one
+logical change.** If it does, split it into separate commits — one per feature, fix, or
+refactor — instead of dumping everything into a single commit. This applies even when the
+user just says "コミットして" without mentioning splitting.
+
+Signals that a diff holds multiple changes:
+
+- Unrelated features or bug fixes touching different areas of the codebase
+- A refactor/rename mixed in with a behavior change
+- Formatting or dependency/lockfile churn alongside real logic changes
+- Changes whose commit message would need "and" or a bullet list to describe honestly
+
+How to split:
+
+1. Group the hunks by logical change and decide the commit order — put prerequisites
+   (refactors, helpers, dependency bumps) before the changes that build on them.
+2. Show the user the planned split (one line per commit: message + files) before starting.
+3. Stage each group explicitly with `git add <paths>` — never `git add -A`/`.`. When a
+   single file contains hunks belonging to different groups, split within the file rather
+   than lumping it in: `git add -p` is not available in this environment, so use
+   `git apply --cached` with a filtered patch, or commit the file with whichever group it
+   truly belongs to and say so.
+4. Commit each group, then verify with `git status` that nothing was left staged or
+   forgotten.
+
+Don't over-split: a change and the test that covers it, or a rename and the call sites it
+touches, belong in one commit. If a clean split isn't possible without breaking the build
+at intermediate commits, keep them together and say why.
 
 ## When to amend instead
 
