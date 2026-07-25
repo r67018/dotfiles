@@ -1,13 +1,13 @@
 ---
 name: git-diff
-description: Use when the user asks what the current uncommitted changes are or wants them explained — "git-diff", "差分を説明して", "今の変更を教えて", "何を変えたっけ", "explain my diff", "what changed", "review my working tree". Reads the working tree (staged, unstaged, and untracked) and reports the facts of the change, grouped by logical change, in as few words as possible. Read-only: never stages, commits, or edits anything.
+description: Use when the user asks what the current uncommitted changes are or wants them explained — "git-diff", "差分を説明して", "今の変更を教えて", "何を変えたっけ", "explain my diff", "what changed", "review my working tree". Reads the working tree (staged, unstaged, and untracked) and reports the facts: an overview of each logical change, then — for the groups whose behavior needs it — the key code quoted in syntax-highlighted blocks with inline comments explaining how it behaves. Read-only: never stages, commits, or edits anything.
 ---
 
 # Explain the current diff
 
-State **what changed**, factually and briefly. Group the hunks so the reader can see the
-shape of the change without reading the patch — then stop. No assessment of the code, no
-speculation about intent, no advice that wasn't asked for.
+State **what changed** and **how the new code behaves** — first as a short overview, then as
+annotated code where the behavior isn't already clear from the overview. Facts only: no
+assessment of the code, no speculation about intent, no advice that wasn't asked for.
 
 ## Read-only
 
@@ -50,6 +50,8 @@ as an addition diff of the entire file.
    memory.
 3. **State what each file contains** — its role and entry points, in a line or two — in the
    same logical-change grouping as the tracked edits, not in a separate "新規ファイル" list.
+   A whole new file is all "added" lines, so if it earns an annotated block at all, quote
+   only its core (the exported entry point, the main branch) — never the entire file.
 4. **Say they're untracked**, once, since that's the part `git commit -a` would silently
    miss and a reviewer needs to know.
 5. **Don't skip the boring ones**, but do scale the detail: generated output, lockfiles,
@@ -58,15 +60,55 @@ as an addition diff of the entire file.
 
 Binary or very large untracked files: report path, kind, and size instead of reading them.
 
-## Structure the explanation by logical change
+## Output shape: overview first, then annotated code
 
-Group the hunks into logical changes — one feature, fix, or refactor per group — and lead
-with those groups. The file list is supporting detail, not the outline.
+Two passes over the same material, in this order. Don't interleave them — the reader
+should be able to stop after the overview.
 
-Each group is **one bullet**: what changed, in the imperative like a commit subject, plus
-the files as clickable `path:line` references. Add a second sentence only when the bullet
-is unreadable without it — a renamed symbol's old and new name, which of several files
-carries the real change.
+### 1. Overview
+
+Group the hunks into logical changes — one feature, fix, or refactor per group — and open
+with those groups, **one bullet each**: what changed, in the imperative like a commit
+subject, plus the files as clickable `path:line` references. The file list is supporting
+detail, not the outline. Add a second sentence only when the bullet is unreadable without
+it — a renamed symbol's old and new name, which of several files carries the real change.
+
+### 2. Annotated code — when the change is code
+
+**Decide per group whether a block earns its place.** This pass is for groups whose behavior
+isn't already conveyed by the overview bullet. Skip it, and end after the overview, when:
+
+- **The changed file is prose** — Markdown, plain text, a `SKILL.md`, a commit template.
+  Prose has no comment syntax to annotate with, and a block of quoted paragraphs explains
+  nothing the bullet didn't. Quote at most a phrase inline when the exact wording is the
+  point.
+- **The change is mechanical** — a typo, a rename, a version bump, a moved line. There is no
+  behavior to explain.
+- **The bullet already said it.** A block that restates its own overview line is noise.
+
+For the groups that do earn one, quote the lines that carry the change in a fenced block and
+explain the behavior **in comments on the code itself**:
+
+- **Tag the fence with the source language** (`ts`, `nix`, `bash`, `py`) so it gets syntax
+  highlighting. Use a `diff` fence only when a removal is the point of the change, since
+  `diff` highlighting shows +/- but loses the language colors.
+- **If the quoted lines themselves contain a fence** — a code block inside a Markdown or
+  YAML file — open and close the outer block with **four** backticks so the inner fence
+  doesn't terminate it early. If nesting still garbles it, drop the block and describe the
+  lines in prose.
+- **Show the post-change state**, not the raw patch. Strip the `+` markers.
+- **Excerpt, don't dump.** Only the lines that carry the change, plus whatever surrounding
+  line makes them parse. Elide the rest with a comment (`// …`, `# …`). Never reproduce a
+  whole file this way.
+- **Comment only what isn't already obvious from the line** — the condition being guarded,
+  what a flag changes, what an early return skips, which branch the common case takes.
+  Every line does not need a comment.
+- Write the comments in the file's own comment syntax and in the user's language.
+- **The `path:line` reference lives in the overview bullet, not above the block.** Repeat it
+  over a block only when the group spans several files and the block would otherwise be
+  ambiguous.
+- **These comments are annotations for the reply, not a proposed edit.** Never write them
+  into the file.
 
 State the stated reason for a change only when the diff itself carries it (a comment, a
 docstring, a removed workaround). Otherwise report the change and stop; **don't infer
@@ -86,11 +128,12 @@ Only these get flagged, and only when actually present, one line each:
 - **Facts only.** No evaluation of the code (clean, well-structured, careful), no praise,
   no suggestions for improvement, no "問題ありません" reassurance. Nothing about the process
   you used to gather the diff.
-- **Short bullets, no tables**, no per-file walkthrough of every hunk, no closing summary
-  that repeats the bullets.
-- **Don't paste the diff back.** Quote at most a line or two when the exact expression is
-  the point.
+- **Short bullets, no tables**, no closing summary that repeats the overview.
+- **The quoted code is an excerpt, never a replay of the patch.** If the annotated blocks
+  add up to most of the diff, you're quoting too much — cut back to the lines that carry
+  the change.
 - **Length follows the diff**: a typo fix gets one sentence; a large feature branch gets a
-  handful of bullets. A summary longer than the diff it describes is a failure.
+  bullet per group. How many of those groups also get a block is decided by the gate in
+  "Annotated code", not by the size of the diff — a big prose-only change still gets none.
 - Say plainly what the diff doesn't tell you — "この変更の意図は diff からは読み取れない" —
   instead of filling the gap with a plausible story.
