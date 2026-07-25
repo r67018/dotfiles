@@ -1,11 +1,51 @@
 ---
 name: git-commit
-description: Use when the user asks to commit changes, amend a commit, or fix up the previous commit — "コミットして", "commit this", "直前のコミットを直して", "amendして", "fixupして". Encodes this user's personal policy for choosing between a new commit and amending the previous one, and for splitting a diff that contains several unrelated changes into one commit per change; always default to a new commit unless the user explicitly asks to amend.
+description: Use when the user asks to commit changes, amend a commit, or fix up the previous commit — "コミットして", "commit this", "直前のコミットを直して", "amendして", "fixupして". Encodes this user's personal policy for choosing between a new commit and amending the previous one, and for splitting a diff that contains several unrelated changes into one commit per change; always default to a new commit unless the user explicitly asks to amend, and refuse to commit secrets found in the diff.
 ---
 
 # Git Commit Policy
 
 **Default: always create a new commit.** Even if the current change looks like it "belongs with" the previous commit (same files, made minutes apart), do not amend on your own judgment — commit new, or ask if genuinely unsure what the user wants.
+
+## First: scan the diff for secrets
+
+**Before staging anything, read the diff and check for credentials or other sensitive
+data. If you find any, do not stage or commit it — stop and warn the user.** This check
+comes before everything else on this page, and it applies even when the user says "全部
+コミットして" or has already approved a split.
+
+What to stop on:
+
+- API keys, tokens, session cookies, OAuth client secrets, webhook URLs with tokens
+- Passwords, and connection strings that embed credentials (`postgres://user:pass@…`)
+- Private keys and certificate/keystore files (`-----BEGIN … PRIVATE KEY-----`, `.pem`,
+  `.p12`, `.key`, `id_rsa`, `.jks`)
+- Cloud credentials (`AKIA…`, service-account JSON, `~/.aws/credentials`, kubeconfigs)
+- Files that normally hold secrets: `.env`, `.env.*`, `credentials.json`, `secrets.yaml`,
+  `*.tfstate`
+- Personal data that doesn't belong in a public repo: real email addresses of third
+  parties, phone numbers, home addresses, license keys
+
+High-entropy strings that merely *look* like keys, obvious placeholders
+(`YOUR_API_KEY_HERE`, `xxxx`), test fixtures, and public identifiers (client IDs, public
+keys) are not secrets — mention them if unsure, but don't block on them.
+
+How to warn:
+
+1. **Don't commit.** Leave the change unstaged (`git restore --staged <path>` if you
+   already staged it). Never "commit it for now and fix it later".
+2. **Name the location, not the value.** Report `path:line` and what kind of secret it
+   looks like. Do not echo the secret itself into your reply, a commit message, or a file.
+3. **Suggest the fix**: move it to an environment variable / secret manager / `sops`-style
+   encrypted file, add the path to `.gitignore`, and replace it with a placeholder.
+4. **Check history too.** If the same secret is already in an earlier commit, say so —
+   removing it from the working tree does not remove it from history, and the credential
+   should be treated as leaked and rotated regardless of what happens to the repo.
+5. **Commit the rest if it's clean.** Unrelated, secret-free groups can still be committed;
+   say explicitly which files you held back and why.
+
+Only commit a flagged change if the user explicitly confirms it's safe (e.g. it's an
+encrypted value, or a deliberately public test key) in the current request.
 
 ## One commit per logical change
 
