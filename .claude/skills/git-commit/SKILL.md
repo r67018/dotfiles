@@ -54,6 +54,31 @@ If any check fails, or the request is ambiguous, fall back to a new commit and s
 
 **Do not add a `Co-Authored-By: Claude ...` trailer or any other AI-authorship note.** This user does not want commits to record that they were made with AI assistance — omit that trailer even though it's part of the generic default commit workflow.
 
+## After committing: offer the push command
+
+**Never run `git push` yourself** unless the user explicitly asked you to push in the
+current request. Instead, once the commit(s) are made, end your reply with the exact push
+command in its own ```bash fenced block, so the user can run it with one click if they
+want to:
+
+````
+```bash
+git push
+```
+````
+
+Rules for the offered command:
+
+- **One command, one fenced block** — no leading `$`, no comments, nothing else inside the
+  fence. If several commits were made, still offer a single `git push`; it pushes them all.
+- **No upstream yet?** Offer `git push -u origin <branch>` with the real branch name filled
+  in, not a placeholder.
+- **After amending a commit that was already pushed**, offer
+  `git push --force-with-lease` (never plain `--force`), and say in one line that this
+  rewrites remote history.
+- Add at most one short sentence of context above the block (e.g. which branch it goes to).
+  Don't explain what `git push` does.
+
 ## Otherwise
 
-Everything else — reviewing `git status`/`git diff`/`git log` for style, drafting the message, staging specific files, the HEREDOC format, not using `-A`/`--no-verify`/`--no-gpg-sign` unless asked, not pushing unless asked — follows the standard commit workflow already in effect.
+Everything else — reviewing `git status`/`git diff`/`git log` for style, drafting the message, staging specific files, the HEREDOC format, not using `-A`/`--no-verify`/`--no-gpg-sign` unless asked — follows the standard commit workflow already in effect.
