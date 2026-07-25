@@ -19,6 +19,13 @@ in
     newcomputermodern
   ];
 
+  # Authenticate sudo with Touch ID (reattach makes it work inside tmux too)
+  security.pam.services.sudo_local = {
+    enable = true;
+    touchIdAuth = true;
+    reattach = true;
+  };
+
   # System defaults
   system.defaults = {
     finder._FXShowPosixPathInTitle = true;
