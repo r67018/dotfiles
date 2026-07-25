@@ -30,7 +30,6 @@
   ];
 
   homebrew.casks = [
-    "zen"
     "thunderbird"
     "discord"
     "slack"
