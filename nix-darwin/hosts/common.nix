@@ -188,6 +188,8 @@ in
       "chatgpt"
       "google-japanese-ime"
       "jetbrains-toolbox"
+      # Ice: menu bar manager
+      "jordanbaird-ice"
     ];
     brews = [
       "mas"
