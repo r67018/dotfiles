@@ -19,6 +19,10 @@ Before amending, confirm all of the following, in order:
 
 If any check fails, or the request is ambiguous, fall back to a new commit and say why.
 
+## Message format
+
+**Do not add a `Co-Authored-By: Claude ...` trailer or any other AI-authorship note.** This user does not want commits to record that they were made with AI assistance — omit that trailer even though it's part of the generic default commit workflow.
+
 ## Otherwise
 
-Everything else — reviewing `git status`/`git diff`/`git log` for style, drafting the message, staging specific files, the HEREDOC format, the Co-Authored-By trailer, not using `-A`/`--no-verify`/`--no-gpg-sign` unless asked, not pushing unless asked — follows the standard commit workflow already in effect.
+Everything else — reviewing `git status`/`git diff`/`git log` for style, drafting the message, staging specific files, the HEREDOC format, not using `-A`/`--no-verify`/`--no-gpg-sign` unless asked, not pushing unless asked — follows the standard commit workflow already in effect.
