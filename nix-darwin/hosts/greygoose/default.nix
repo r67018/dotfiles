@@ -27,7 +27,6 @@
     "/Applications/Notion.app"
     "/Applications/Claude.app"
     "/Applications/Codex.app"
-    "/Applications/Gemini.app"
   ];
 
   homebrew.casks = [
