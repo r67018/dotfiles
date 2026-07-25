@@ -8,8 +8,6 @@ ln -nfs $PWD/.zshrc ~/.zshrc
 ln -nfs $PWD/.tmux.conf ~/.tmux.conf
 # fish
 ln -nfs $PWD/.config/fish ~/.config/fish
-# git
-ln -nfs $PWD/.gitconfig ~/.gitconfig
 # neovim
 ln -nfs $PWD/.config/nvim ~/.config/nvim
 # IdeaVim(vim plugin for Jetbrains IDE)
