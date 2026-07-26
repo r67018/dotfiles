@@ -36,6 +36,7 @@
     "microsoft-teams"
     "cloudflare-warp"
     "codex-app"
+    "adobe-acrobat-reader"
   ];
 
   homebrew.masApps = {
