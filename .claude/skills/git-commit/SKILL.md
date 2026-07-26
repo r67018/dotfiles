@@ -1,6 +1,6 @@
 ---
 name: git-commit
-description: Use when the user asks to commit changes, amend a commit, or fix up the previous commit — "コミットして", "commit this", "直前のコミットを直して", "amendして", "fixupして". Encodes this user's personal policy for choosing between a new commit and amending the previous one, and for splitting a diff that contains several unrelated changes into one commit per change; always default to a new commit unless the user explicitly asks to amend, and refuse to commit secrets found in the diff.
+description: Use when the user asks to commit changes, amend a commit, or fix up the previous commit — "コミットして", "commit this", "直前のコミットを直して", "amendして", "fixupして". Encodes this user's personal policy for choosing between a new commit and amending the previous one, and for splitting a diff that contains several unrelated changes into one commit per change; always default to a new commit unless the user explicitly asks to amend, refuse to commit secrets found in the diff, and warn and ask the user before committing personal information such as real names or email addresses.
 ---
 
 # Git Commit Policy
@@ -23,8 +23,7 @@ What to stop on:
 - Cloud credentials (`AKIA…`, service-account JSON, `~/.aws/credentials`, kubeconfigs)
 - Files that normally hold secrets: `.env`, `.env.*`, `credentials.json`, `secrets.yaml`,
   `*.tfstate`
-- Personal data that doesn't belong in a public repo: real email addresses of third
-  parties, phone numbers, home addresses, license keys
+- License keys
 
 High-entropy strings that merely *look* like keys, obvious placeholders
 (`YOUR_API_KEY_HERE`, `xxxx`), test fixtures, and public identifiers (client IDs, public
@@ -52,6 +51,56 @@ How to warn:
 
 Only commit a flagged change if the user explicitly confirms it's safe (e.g. it's an
 encrypted value, or a deliberately public test key) in the current request.
+
+## Next: scan the diff for personal information
+
+**Personal information is not a hard stop like a secret — it's a judgment call that
+belongs to the user. When the diff adds personal data, warn and ask before committing;
+don't decide on your own that it's fine.** Unlike a leaked credential, a name or an
+address is often *supposed* to be there — so the rule is "surface it and wait", not
+"refuse".
+
+What to flag:
+
+- **Personal names** — real people's full names (the user's own included), especially
+  when they appear in code, config, fixtures, or documentation rather than in git
+  metadata
+- **Email addresses** — the user's own and anyone else's, including addresses embedded in
+  config values, sample data, and comments
+- Phone numbers, home/street addresses, birthdates
+- Account identifiers tied to a real person: personal usernames on external services,
+  employee/student IDs, social-security-style national ID numbers
+- Screenshots, logs, or exported data files that carry any of the above
+
+Don't flag: the author identity that git records on its own (`user.name` / `user.email`
+in a commit's metadata — that's how git works and is not part of the diff), addresses
+this repo already commits deliberately in the same form elsewhere, obviously fake
+examples (`taro@example.com`, `John Doe`, `test@test.local`), and public
+organizational contact details (a company's published support address).
+
+How to warn:
+
+1. **Pause before staging.** Say what you found and where, as `path:line`, and what kind
+   of personal data it looks like.
+2. **Show the value in this case.** Unlike a secret, the user needs to see the actual
+   string to judge it — it's already in their working tree and echoing it leaks nothing
+   new. Keep it to the matched value, not the surrounding block.
+3. **Say who it appears to belong to** — the user themselves, or a third party. A third
+   party's data deserves a stronger caution: they didn't consent to being committed.
+4. **Ask, with the repo's reach in mind.** State whether the remote looks public or
+   private (`git remote -v`) — the same email is unremarkable in a private dotfiles repo
+   and a real exposure in a public one. Then ask directly: commit as-is, replace with a
+   placeholder / environment variable, or drop those hunks?
+5. **Wait for the answer.** Don't commit the flagged group until the user replies. Groups
+   that are clean can be committed meanwhile — say which ones you held back.
+6. **Check history too** if the same data already appears in earlier commits, since
+   removing it from the working tree won't remove it from history.
+
+**When the diff has none, say nothing** — same as the secrets scan. A clean result never
+produces output.
+
+If the user has already said in the current request that the personal data is intentional
+(e.g. "自分のメアドだから大丈夫", "これは意図的に入れてる"), commit it without re-asking.
 
 ## One commit per logical change
 
