@@ -67,7 +67,8 @@ let
       done
 
       # The companion Claude Skill ships in-tree; keep it addressable from the
-      # store so it can be diffed against the copy vendored in .claude/skills.
+      # store so it can be diffed against the copy vendored in the private
+      # my-skills repo (~/my-skills/skills/thunderbird-cli).
       mkdir -p "$out/share/thunderbird-cli"
       cp -R skills "$out/share/thunderbird-cli/"
 
