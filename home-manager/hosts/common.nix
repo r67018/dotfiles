@@ -10,6 +10,7 @@
     inputs.sops-nix.homeManagerModules.sops
 
     ../modules/git.nix
+    ../modules/repo-sync.nix
     ../modules/ssh.nix
     ../modules/zsh.nix
     ../modules/direnv.nix
