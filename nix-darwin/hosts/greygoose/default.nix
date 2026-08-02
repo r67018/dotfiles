@@ -37,6 +37,12 @@
     "cloudflare-warp"
     "codex-app"
     "adobe-acrobat-reader"
+    "proton-drive"
+    "proton-mail"
+    "proton-mail-bridge"
+    "proton-meet"
+    "proton-pass"
+    "protonvpn"
   ];
 
   homebrew.masApps = {
