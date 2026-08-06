@@ -11,6 +11,7 @@
 let
   git = lib.getExe pkgs.git;
   ssh = lib.getExe pkgs.openssh;
+  bash = lib.getExe pkgs.bash;
 
   repos = [
     {
@@ -20,11 +21,21 @@ let
     {
       name = "my-skills";
       url = "git@github.com:r67018/my-skills.git";
+      # Symlinks each skills/<name> into ~/.claude/skills and ~/.codex/skills.
+      # Nothing else runs it, so a fresh clone (or a pull that brought in a new
+      # skill) would otherwise leave those skills invisible to both agents.
+      postSync = "scripts/sync-skills.sh";
     }
   ];
 
   syncRepoCalls = lib.concatMapStringsSep "\n" (
-    { name, url }: "sync_repo ${lib.escapeShellArg name} ${lib.escapeShellArg url}"
+    repo:
+    lib.concatStringsSep " " [
+      "sync_repo"
+      (lib.escapeShellArg repo.name)
+      (lib.escapeShellArg repo.url)
+      (lib.escapeShellArg (repo.postSync or ""))
+    ]
   ) repos;
 in
 {
@@ -37,7 +48,7 @@ in
     [ "fixSshConfigPermissions" ]
     ''
     sync_repo() {
-      local name="$1" url="$2"
+      local name="$1" url="$2" post_sync="$3"
       local dir="${config.home.homeDirectory}/$name"
 
       if [ -e "$dir" ] && [ ! -d "$dir/.git" ]; then
@@ -57,6 +68,15 @@ in
       else
         if ! run ${git} -c core.sshCommand=${lib.escapeShellArg ssh} clone --quiet "$url" "$dir"; then
           echo "repo-sync: git clone failed for $name — leaving $dir absent" >&2
+        fi
+      fi
+
+      # Runs whenever the checkout is present, not just after a successful
+      # pull: the script is idempotent, and an offline `switch` should still
+      # link up whatever the last pull brought in.
+      if [ -n "$post_sync" ] && [ -x "$dir/$post_sync" ]; then
+        if ! run ${bash} "$dir/$post_sync"; then
+          echo "repo-sync: $post_sync failed for $name" >&2
         fi
       fi
     }
