@@ -2,10 +2,35 @@
 let
   primaryUser = config.system.primaryUser;
 
-  # Exactly two input sources in the menu: macOS' own ABC for the alphabet and
-  # Google 日本語入力's ひらがな for Japanese. Google IME also ships a 英数
-  # (Roman) mode that duplicates what ABC already does, so keeping it only adds
-  # a third stop to the Ctrl-Space cycle.
+  # yaskkserv2 supplies Google Japanese Input API candidates only when the
+  # local SKK dictionary has no match.
+  yaskkserv2 = pkgs.rustPlatform.buildRustPackage {
+    pname = "yaskkserv2";
+    version = "0.1.7";
+    src = pkgs.fetchFromGitHub {
+      owner = "wachikun";
+      repo = "yaskkserv2";
+      rev = "0.1.7";
+      hash = "sha256-bF8OHP6nvGhxXNvvnVCuOVFarK/n7WhGRktRN4X5ZjE=";
+    };
+    cargoHash = "sha256-cycs8Zism228rjMaBpNYa4K1Ll760UhLKkoTX6VJRU0=";
+    doCheck = false;
+  };
+
+  # SKK-JISYO.L covers common vocabulary locally. yaskkserv2 only queries
+  # Google for terms that this dictionary does not contain.
+  yaskkserv2Dictionary = pkgs.runCommand "yaskkserv2-dictionary" { } ''
+    ${pkgs.coreutils}/bin/mkdir -p "$out"
+    ${yaskkserv2}/bin/yaskkserv2_make_dictionary \
+      --dictionary-filename="$out/dictionary.yaskkserv2" \
+      ${pkgs.skkDictionaries.l}/share/skk/SKK-JISYO.L
+  '';
+
+  yaskkserv2Cache = "/Users/${primaryUser}/Library/Caches/yaskkserv2.cache";
+
+  # Exactly two input sources in the menu: macSKK's ABC for the alphabet and
+  # macSKK's ひらがな for Japanese. Keeping both modes in macSKK avoids mixing
+  # macOS/other IME state when switching with Ctrl-Space.
   #
   # The palette entries at the end aren't user-visible input sources; macOS
   # keeps them enabled by itself. They are listed so this stays byte-for-byte
@@ -13,13 +38,13 @@ let
   # below compare against it.
   enabledInputSources = [
     {
-      InputSourceKind = "Keyboard Layout";
-      "KeyboardLayout ID" = 252;
-      "KeyboardLayout Name" = "ABC";
+      "Bundle ID" = "net.mtgto.inputmethod.macSKK";
+      "Input Mode" = "net.mtgto.inputmethod.macSKK.ascii";
+      InputSourceKind = "Input Mode";
     }
     {
-      "Bundle ID" = "com.google.inputmethod.Japanese";
-      "Input Mode" = "com.apple.inputmethod.Japanese";
+      "Bundle ID" = "net.mtgto.inputmethod.macSKK";
+      "Input Mode" = "net.mtgto.inputmethod.macSKK.hiragana";
       InputSourceKind = "Input Mode";
     }
     {
@@ -36,28 +61,61 @@ let
     }
   ];
 
-  # Google IME enables every input mode its bundle ships with whenever it is
-  # installed, and it updates itself in the background through Google's own
-  # keystone agent — outside Homebrew, so no darwin-rebuild is involved. That is
-  # how 英数 keeps coming back: the declarative write below only runs at
-  # activation, while the re-add can happen any time and first becomes visible
-  # at the next login. So re-assert the list at every login too.
-  enforceInputSources = pkgs.writeShellScript "enforce-input-sources" ''
-    want=$(${pkgs.jq}/bin/jq -cS . ${
-      pkgs.writeText "enabled-input-sources.json" (builtins.toJSON enabledInputSources)
-    })
-    have=$(/usr/bin/defaults export com.apple.HIToolbox - \
-      | /usr/bin/plutil -extract AppleEnabledInputSources json -o - - 2>/dev/null \
-      | ${pkgs.jq}/bin/jq -cS . 2>/dev/null) || have=
+  selectedInputSources = [
+    {
+      "Bundle ID" = "net.mtgto.inputmethod.macSKK";
+      "Input Mode" = "net.mtgto.inputmethod.macSKK.hiragana";
+      InputSourceKind = "Input Mode";
+    }
+  ];
 
-    if [ "$want" = "$have" ]; then
+  inputSourceHistory = selectedInputSources ++ [
+    {
+      "Bundle ID" = "net.mtgto.inputmethod.macSKK";
+      "Input Mode" = "net.mtgto.inputmethod.macSKK.ascii";
+      InputSourceKind = "Input Mode";
+    }
+  ];
+
+  # macOS and input methods can modify these preferences outside nix-darwin, so
+  # re-assert the declarative list and selected source at every login too. The
+  # Homebrew cask is installed after activation; opening the input-method app
+  # once and watching its install path makes its first registration automatic.
+  enforceInputSources = pkgs.writeShellScript "enforce-input-sources" ''
+    inputMethod="/Library/Input Methods/macSKK.app"
+    if [ ! -d "$inputMethod" ]; then
       exit 0
     fi
 
-    /usr/bin/defaults write com.apple.HIToolbox AppleEnabledInputSources "$(< ${
-      pkgs.writeText "enabled-input-sources.plist"
-        (lib.generators.toPlist { escape = true; } enabledInputSources)
-    })"
+    # Make Text Input Services discover macSKK before referring to its input
+    # modes below. `-g` prevents an app switch and `-j` hides it from Recents.
+    /usr/bin/open -gj "$inputMethod" 2>/dev/null || true
+    /bin/sleep 2
+
+    want=$(${pkgs.jq}/bin/jq -cnS \
+      --slurpfile enabled ${pkgs.writeText "enabled-input-sources.json" (builtins.toJSON enabledInputSources)} \
+      --slurpfile selected ${pkgs.writeText "selected-input-sources.json" (builtins.toJSON selectedInputSources)} \
+      --slurpfile history ${pkgs.writeText "input-source-history.json" (builtins.toJSON inputSourceHistory)} \
+      '{ enabled: $enabled[0], selected: $selected[0], history: $history[0] }')
+
+    have=$(/usr/bin/defaults export com.apple.HIToolbox - \
+      | /usr/bin/plutil -convert json -o - - 2>/dev/null \
+      | ${pkgs.jq}/bin -cS '{ enabled: .AppleEnabledInputSources, selected: .AppleSelectedInputSources, history: .AppleInputSourceHistory }' 2>/dev/null) || have=
+
+    if [ "$want" != "$have" ]; then
+      /usr/bin/defaults write com.apple.HIToolbox AppleEnabledInputSources "$(< ${
+        pkgs.writeText "enabled-input-sources.plist"
+          (lib.generators.toPlist { escape = true; } enabledInputSources)
+      })"
+      /usr/bin/defaults write com.apple.HIToolbox AppleSelectedInputSources "$(< ${
+        pkgs.writeText "selected-input-sources.plist"
+          (lib.generators.toPlist { escape = true; } selectedInputSources)
+      })"
+      /usr/bin/defaults write com.apple.HIToolbox AppleInputSourceHistory "$(< ${
+        pkgs.writeText "input-source-history.plist"
+          (lib.generators.toPlist { escape = true; } inputSourceHistory)
+      })"
+    fi
 
     # Writing the preference directly skips the notification the Text Input
     # Services API would have posted, so anything already running keeps serving
@@ -115,27 +173,29 @@ in
     # renders as an unreadable pile of overlapping thumbnails.
     dock.expose-group-apps = true;
     CustomUserPreferences."com.apple.HIToolbox" = {
-      AppleCurrentKeyboardLayoutInputSourceID = "com.apple.keylayout.ABC";
+      AppleCurrentKeyboardLayoutInputSourceID = "net.mtgto.inputmethod.macSKK.ascii";
       AppleEnabledInputSources = enabledInputSources;
-      AppleInputSourceHistory = [
-        {
-          "Bundle ID" = "com.google.inputmethod.Japanese";
-          "Input Mode" = "com.apple.inputmethod.Japanese";
-          InputSourceKind = "Input Mode";
-        }
-        {
-          InputSourceKind = "Keyboard Layout";
-          "KeyboardLayout ID" = 252;
-          "KeyboardLayout Name" = "ABC";
-        }
-      ];
-      AppleSelectedInputSources = [
-        {
-          "Bundle ID" = "com.google.inputmethod.Japanese";
-          "Input Mode" = "com.apple.inputmethod.Japanese";
-          InputSourceKind = "Input Mode";
-        }
-      ];
+      AppleInputSourceHistory = inputSourceHistory;
+      AppleSelectedInputSources = selectedInputSources;
+    };
+    CustomUserPreferences."net.mtgto.inputmethod.macSKK" = {
+      # Keep Japanese sentence punctuation full-width in every Japanese input
+      # mode while retaining the default kana conversion rules.
+      kanaRule = ''
+        #!use-default
+        ?,？,？,？
+        !,！,！,！
+      '';
+      skkserv = {
+        enabled = true;
+        address = "127.0.0.1";
+        port = 1178;
+        requestEncoding = 3;
+        responseEncoding = 3;
+        encoding = 3;
+        saveToUserDict = true;
+        enableCompletion = false;
+      };
     };
   };
 
@@ -145,12 +205,31 @@ in
     serviceConfig = {
       ProgramArguments = [ "/bin/sh" "-c" "/bin/wait4path /nix/store && exec ${enforceInputSources}" ];
       RunAtLoad = true;
+      WatchPaths = [ "/Library/Input Methods/macSKK.app" ];
+    };
+  };
+
+  launchd.user.agents.yaskkserv2 = {
+    serviceConfig = {
+      ProgramArguments = [
+        "${yaskkserv2}/bin/yaskkserv2"
+        "--no-daemonize"
+        "--google-japanese-input=notfound"
+        "--google-suggest"
+        "--google-cache-filename=${yaskkserv2Cache}"
+        "${yaskkserv2Dictionary}/dictionary.yaskkserv2"
+      ];
+      RunAtLoad = true;
+      KeepAlive = true;
+      StandardOutPath = "/Users/${primaryUser}/Library/Logs/yaskkserv2.log";
+      StandardErrorPath = "/Users/${primaryUser}/Library/Logs/yaskkserv2.error.log";
     };
   };
 
   system.activationScripts.postActivation.text = ''
-    # Make Ctrl-Space cycle input sources instead of using the history-based
-    # "previous input source" action, which can become one-way with Google IME.
+    # "Previous input source" follows macOS' history, which includes macSKK's
+    # internal katakana state after pressing q. Use "next input source" instead:
+    # it cycles only the enabled sources, macSKK ABC and ひらがな.
     sudo -u "${primaryUser}" /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 '{ enabled = 0; value = { parameters = (32, 49, 262144); type = standard; }; }'
     sudo -u "${primaryUser}" /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 '{ enabled = 1; value = { parameters = (32, 49, 262144); type = standard; }; }'
 
@@ -186,7 +265,7 @@ in
       "kitty"
       "claude"
       "chatgpt"
-      "google-japanese-ime"
+      "macskk"
       "jetbrains-toolbox"
       # Ice: menu bar manager
       "jordanbaird-ice"
