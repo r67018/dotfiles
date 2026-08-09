@@ -28,104 +28,6 @@ let
 
   yaskkserv2Cache = "/Users/${primaryUser}/Library/Caches/yaskkserv2.cache";
 
-  # Exactly two input sources in the menu: macSKK's ABC for the alphabet and
-  # macSKK's ひらがな for Japanese. Keeping both modes in macSKK avoids mixing
-  # macOS/other IME state when switching with Ctrl-Space.
-  #
-  # The palette entries at the end aren't user-visible input sources; macOS
-  # keeps them enabled by itself. They are listed so this stays byte-for-byte
-  # the list the system actually stores, which is what lets the login agent
-  # below compare against it.
-  enabledInputSources = [
-    {
-      "Bundle ID" = "net.mtgto.inputmethod.macSKK";
-      "Input Mode" = "net.mtgto.inputmethod.macSKK.ascii";
-      InputSourceKind = "Input Mode";
-    }
-    {
-      "Bundle ID" = "net.mtgto.inputmethod.macSKK";
-      "Input Mode" = "net.mtgto.inputmethod.macSKK.hiragana";
-      InputSourceKind = "Input Mode";
-    }
-    {
-      "Bundle ID" = "com.apple.CharacterPaletteIM";
-      InputSourceKind = "Non Keyboard Input Method";
-    }
-    {
-      "Bundle ID" = "com.apple.50onPaletteIM";
-      InputSourceKind = "Non Keyboard Input Method";
-    }
-    {
-      "Bundle ID" = "com.apple.PressAndHold";
-      InputSourceKind = "Non Keyboard Input Method";
-    }
-  ];
-
-  selectedInputSources = [
-    {
-      "Bundle ID" = "net.mtgto.inputmethod.macSKK";
-      "Input Mode" = "net.mtgto.inputmethod.macSKK.hiragana";
-      InputSourceKind = "Input Mode";
-    }
-  ];
-
-  inputSourceHistory = selectedInputSources ++ [
-    {
-      "Bundle ID" = "net.mtgto.inputmethod.macSKK";
-      "Input Mode" = "net.mtgto.inputmethod.macSKK.ascii";
-      InputSourceKind = "Input Mode";
-    }
-  ];
-
-  # macOS and input methods can modify these preferences outside nix-darwin, so
-  # re-assert the declarative list and selected source at every login too. The
-  # Homebrew cask is installed after activation; opening the input-method app
-  # once and watching its install path makes its first registration automatic.
-  enforceInputSources = pkgs.writeShellScript "enforce-input-sources" ''
-    inputMethod="/Library/Input Methods/macSKK.app"
-    if [ ! -d "$inputMethod" ]; then
-      exit 0
-    fi
-
-    # Make Text Input Services discover macSKK before referring to its input
-    # modes below. `-g` prevents an app switch and `-j` hides it from Recents.
-    /usr/bin/open -gj "$inputMethod" 2>/dev/null || true
-    /bin/sleep 2
-
-    want=$(${pkgs.jq}/bin/jq -cnS \
-      --slurpfile enabled ${pkgs.writeText "enabled-input-sources.json" (builtins.toJSON enabledInputSources)} \
-      --slurpfile selected ${pkgs.writeText "selected-input-sources.json" (builtins.toJSON selectedInputSources)} \
-      --slurpfile history ${pkgs.writeText "input-source-history.json" (builtins.toJSON inputSourceHistory)} \
-      '{ enabled: $enabled[0], selected: $selected[0], history: $history[0] }')
-
-    have=$(/usr/bin/defaults export com.apple.HIToolbox - \
-      | /usr/bin/plutil -convert json -o - - 2>/dev/null \
-      | ${pkgs.jq}/bin -cS '{ enabled: .AppleEnabledInputSources, selected: .AppleSelectedInputSources, history: .AppleInputSourceHistory }' 2>/dev/null) || have=
-
-    if [ "$want" != "$have" ]; then
-      /usr/bin/defaults write com.apple.HIToolbox AppleEnabledInputSources "$(< ${
-        pkgs.writeText "enabled-input-sources.plist"
-          (lib.generators.toPlist { escape = true; } enabledInputSources)
-      })"
-      /usr/bin/defaults write com.apple.HIToolbox AppleSelectedInputSources "$(< ${
-        pkgs.writeText "selected-input-sources.plist"
-          (lib.generators.toPlist { escape = true; } selectedInputSources)
-      })"
-      /usr/bin/defaults write com.apple.HIToolbox AppleInputSourceHistory "$(< ${
-        pkgs.writeText "input-source-history.plist"
-          (lib.generators.toPlist { escape = true; } inputSourceHistory)
-      })"
-    fi
-
-    # Writing the preference directly skips the notification the Text Input
-    # Services API would have posted, so anything already running keeps serving
-    # the list it read at startup. Post it by hand, and restart the menu bar
-    # item too in case it read the list before this agent got to run.
-    # (`launchctl kickstart` is not an option here: SIP refuses it for Apple's
-    # own agents.)
-    /usr/bin/osascript -l JavaScript -e 'ObjC.import("Foundation"); $.NSDistributedNotificationCenter.defaultCenter.postNotificationNameObjectUserInfoDeliverImmediately("AppleEnabledInputSourcesChangedNotification", $(), $(), true)' > /dev/null
-    /usr/bin/killall TextInputMenuAgent 2>/dev/null || true
-  '';
 in
 {
   # Determine Installer collision
@@ -172,12 +74,6 @@ in
     # Aerospace tiles windows edge to edge, which Mission Control otherwise
     # renders as an unreadable pile of overlapping thumbnails.
     dock.expose-group-apps = true;
-    CustomUserPreferences."com.apple.HIToolbox" = {
-      AppleCurrentKeyboardLayoutInputSourceID = "net.mtgto.inputmethod.macSKK.ascii";
-      AppleEnabledInputSources = enabledInputSources;
-      AppleInputSourceHistory = inputSourceHistory;
-      AppleSelectedInputSources = selectedInputSources;
-    };
     CustomUserPreferences."net.mtgto.inputmethod.macSKK" = {
       # Keep Japanese sentence punctuation full-width in every Japanese input
       # mode while retaining the default kana conversion rules.
@@ -186,6 +82,7 @@ in
         ?,？,？,？
         !,！,！,！
       '';
+      showInputModePanel = true;
       skkserv = {
         enabled = true;
         address = "127.0.0.1";
@@ -196,16 +93,6 @@ in
         saveToUserDict = true;
         enableCompletion = false;
       };
-    };
-  };
-
-  # wait4path because /nix is a separate volume that isn't mounted yet this
-  # early in login.
-  launchd.user.agents.input-sources = {
-    serviceConfig = {
-      ProgramArguments = [ "/bin/sh" "-c" "/bin/wait4path /nix/store && exec ${enforceInputSources}" ];
-      RunAtLoad = true;
-      WatchPaths = [ "/Library/Input Methods/macSKK.app" ];
     };
   };
 
@@ -227,11 +114,10 @@ in
   };
 
   system.activationScripts.postActivation.text = ''
-    # "Previous input source" follows macOS' history, which includes macSKK's
-    # internal katakana state after pressing q. Use "next input source" instead:
-    # it cycles only the enabled sources, macSKK ABC and ひらがな.
+    # macSKK handles mode changes itself; do not let Ctrl-Space cycle its
+    # separately registered internal modes through macOS.
     sudo -u "${primaryUser}" /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 '{ enabled = 0; value = { parameters = (32, 49, 262144); type = standard; }; }'
-    sudo -u "${primaryUser}" /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 '{ enabled = 1; value = { parameters = (32, 49, 262144); type = standard; }; }'
+    sudo -u "${primaryUser}" /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 '{ enabled = 0; value = { parameters = (32, 49, 786432); type = standard; }; }'
 
     # Stop the annoying "Application is damaged" or "can't be opened" for downloaded apps
     echo "Removing quarantine attribute from applications..."
