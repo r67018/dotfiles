@@ -102,7 +102,7 @@ in
         ?,？,？,？
         !,！,！,！
       '';
-      showInputModePanel = true;
+      showInputModePanel = false;
       skkserv = {
         enabled = true;
         address = "127.0.0.1";
