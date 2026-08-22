@@ -28,6 +28,26 @@ let
 
   yaskkserv2Cache = "/Users/${primaryUser}/Library/Caches/yaskkserv2.cache";
 
+  # Start each login in macSKK's ASCII mode. Selecting through Text Input
+  # Services avoids corrupting InputMethodKit state by editing HIToolbox
+  # preferences directly. Ctrl-J then switches macSKK to hiragana mode.
+  selectMacSKKAscii = pkgs.writeShellScript "select-macskk-ascii" ''
+    inputMethod="/Library/Input Methods/macSKK.app"
+    if [ ! -d "$inputMethod" ]; then
+      exit 0
+    fi
+
+    # Text Input Services can take a moment to register input modes at login.
+    for attempt in 1 2 3 4 5; do
+      if ${pkgs.macism}/bin/macism net.mtgto.inputmethod.macSKK.ascii; then
+        exit 0
+      fi
+      /bin/sleep 1
+    done
+
+    exit 1
+  '';
+
 in
 {
   # Determine Installer collision
@@ -110,6 +130,14 @@ in
       KeepAlive = true;
       StandardOutPath = "/Users/${primaryUser}/Library/Logs/yaskkserv2.log";
       StandardErrorPath = "/Users/${primaryUser}/Library/Logs/yaskkserv2.error.log";
+    };
+  };
+
+  launchd.user.agents.macskk-default-input-source = {
+    serviceConfig = {
+      ProgramArguments = [ "${selectMacSKKAscii}" ];
+      RunAtLoad = true;
+      WatchPaths = [ "/Library/Input Methods/macSKK.app" ];
     };
   };
 
