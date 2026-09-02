@@ -1,9 +1,11 @@
-{ lib, ... }: {
+{ lib, pkgs, ... }: {
   networking.hostName = "r-gotonoMacBook-Air";
   networking.computerName = "r-gotonoMacBook-Air";
 
   system.primaryUser = "r_goto";
   users.users."r_goto".home = "/Users/r_goto";
+
+  environment.systemPackages = [ pkgs.pnpm ];
 
   system.defaults.dock.persistent-apps = [
     "/Applications/Zen Browser.app"
@@ -18,6 +20,7 @@
     "google-gemini"
     "openvpn-connect"
     "codex-app"
+    "cursor"
   ];
 
   homebrew.onActivation.autoUpdate = true;
