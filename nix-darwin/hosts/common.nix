@@ -1,53 +1,6 @@
 { config, lib, pkgs, ... }:
 let
   primaryUser = config.system.primaryUser;
-
-  # yaskkserv2 supplies Google Japanese Input API candidates only when the
-  # local SKK dictionary has no match.
-  yaskkserv2 = pkgs.rustPlatform.buildRustPackage {
-    pname = "yaskkserv2";
-    version = "0.1.7";
-    src = pkgs.fetchFromGitHub {
-      owner = "wachikun";
-      repo = "yaskkserv2";
-      rev = "0.1.7";
-      hash = "sha256-bF8OHP6nvGhxXNvvnVCuOVFarK/n7WhGRktRN4X5ZjE=";
-    };
-    cargoHash = "sha256-cycs8Zism228rjMaBpNYa4K1Ll760UhLKkoTX6VJRU0=";
-    doCheck = false;
-  };
-
-  # SKK-JISYO.L covers common vocabulary locally. yaskkserv2 only queries
-  # Google for terms that this dictionary does not contain.
-  yaskkserv2Dictionary = pkgs.runCommand "yaskkserv2-dictionary" { } ''
-    ${pkgs.coreutils}/bin/mkdir -p "$out"
-    ${yaskkserv2}/bin/yaskkserv2_make_dictionary \
-      --dictionary-filename="$out/dictionary.yaskkserv2" \
-      ${pkgs.skkDictionaries.l}/share/skk/SKK-JISYO.L
-  '';
-
-  yaskkserv2Cache = "/Users/${primaryUser}/Library/Caches/yaskkserv2.cache";
-
-  # Start each login in macSKK's ASCII mode. Selecting through Text Input
-  # Services avoids corrupting InputMethodKit state by editing HIToolbox
-  # preferences directly. Ctrl-J then switches macSKK to hiragana mode.
-  selectMacSKKAscii = pkgs.writeShellScript "select-macskk-ascii" ''
-    inputMethod="/Library/Input Methods/macSKK.app"
-    if [ ! -d "$inputMethod" ]; then
-      exit 0
-    fi
-
-    # Text Input Services can take a moment to register input modes at login.
-    for attempt in 1 2 3 4 5; do
-      if ${pkgs.macism}/bin/macism net.mtgto.inputmethod.macSKK.ascii; then
-        exit 0
-      fi
-      /bin/sleep 1
-    done
-
-    exit 1
-  '';
-
 in
 {
   # Determine Installer collision
@@ -94,58 +47,12 @@ in
     # Aerospace tiles windows edge to edge, which Mission Control otherwise
     # renders as an unreadable pile of overlapping thumbnails.
     dock.expose-group-apps = true;
-    CustomUserPreferences."net.mtgto.inputmethod.macSKK" = {
-      # Keep Japanese sentence punctuation full-width in every Japanese input
-      # mode while retaining the default kana conversion rules.
-      kanaRule = ''
-        #!use-default
-        ?,？,？,？
-        !,！,！,！
-      '';
-      showInputModePanel = false;
-      skkserv = {
-        enabled = true;
-        address = "127.0.0.1";
-        port = 1178;
-        requestEncoding = 3;
-        responseEncoding = 3;
-        encoding = 3;
-        saveToUserDict = true;
-        enableCompletion = false;
-      };
-    };
-  };
-
-  launchd.user.agents.yaskkserv2 = {
-    serviceConfig = {
-      ProgramArguments = [
-        "${yaskkserv2}/bin/yaskkserv2"
-        "--no-daemonize"
-        "--google-japanese-input=notfound"
-        "--google-suggest"
-        "--google-cache-filename=${yaskkserv2Cache}"
-        "${yaskkserv2Dictionary}/dictionary.yaskkserv2"
-      ];
-      RunAtLoad = true;
-      KeepAlive = true;
-      StandardOutPath = "/Users/${primaryUser}/Library/Logs/yaskkserv2.log";
-      StandardErrorPath = "/Users/${primaryUser}/Library/Logs/yaskkserv2.error.log";
-    };
-  };
-
-  launchd.user.agents.macskk-default-input-source = {
-    serviceConfig = {
-      ProgramArguments = [ "${selectMacSKKAscii}" ];
-      RunAtLoad = true;
-      WatchPaths = [ "/Library/Input Methods/macSKK.app" ];
-    };
   };
 
   system.activationScripts.postActivation.text = ''
-    # macSKK handles mode changes itself; do not let Ctrl-Space cycle its
-    # separately registered internal modes through macOS.
-    sudo -u "${primaryUser}" /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 '{ enabled = 0; value = { parameters = (32, 49, 262144); type = standard; }; }'
-    sudo -u "${primaryUser}" /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 '{ enabled = 0; value = { parameters = (32, 49, 786432); type = standard; }; }'
+    # azooKey is selected as a regular macOS input source.
+    sudo -u "${primaryUser}" /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 '{ enabled = 1; value = { parameters = (32, 49, 262144); type = standard; }; }'
+    sudo -u "${primaryUser}" /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 '{ enabled = 1; value = { parameters = (32, 49, 786432); type = standard; }; }'
 
     # Stop the annoying "Application is damaged" or "can't be opened" for downloaded apps
     echo "Removing quarantine attribute from applications..."
@@ -179,7 +86,7 @@ in
       "kitty"
       "claude"
       "chatgpt"
-      "macskk"
+      "azookey"
       "jetbrains-toolbox"
       # Ice: menu bar manager
       "jordanbaird-ice"
