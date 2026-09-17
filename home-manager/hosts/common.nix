@@ -27,7 +27,7 @@
     ripgrep
     jq
     sops
-    gemini-cli
+    antigravity-cli
     inputs.claude-code.packages.${pkgs.system}.claude-code
     inputs.codex-cli.packages.${pkgs.system}.codex
 
