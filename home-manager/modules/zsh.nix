@@ -1,5 +1,8 @@
 { pkgs, ... }:
 {
+  # ~/.local/bin is the usual place for user-installed binaries.
+  home.sessionPath = [ "$HOME/.local/bin" ];
+
   programs.zsh = {
     enable = true;
     shellAliases = {
@@ -21,6 +24,7 @@
     });
     initContent = ''
       zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
+
     '';
   };
   programs.starship = {
