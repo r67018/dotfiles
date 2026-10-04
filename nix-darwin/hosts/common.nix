@@ -8,7 +8,14 @@ in
   nix.settings.experimental-features = "nix-command flakes";
 
   # System packages
-  environment.systemPackages = [ pkgs.vim pkgs.git pkgs.docker pkgs.docker-compose pkgs.colima ];
+  environment.systemPackages = [
+    pkgs.vim
+    pkgs.git
+    pkgs.docker
+    pkgs.docker-compose
+    pkgs.colima
+    pkgs.tmux
+  ];
 
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono

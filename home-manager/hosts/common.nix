@@ -24,6 +24,7 @@
   # Common packages
   home.packages = with pkgs; [
     # CLI tools
+    tmux
     ripgrep
     jq
     sops
@@ -64,4 +65,5 @@
   programs.home-manager.enable = true;
   
   home.file.".ideavimrc".source = ../../.ideavimrc;
+  home.file.".tmux.conf".source = ../../.tmux.conf;
 }

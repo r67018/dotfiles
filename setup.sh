@@ -4,8 +4,6 @@ PWD=$(pwd -P)
 
 # zsh
 ln -nfs $PWD/.zshrc ~/.zshrc
-# tmux
-ln -nfs $PWD/.tmux.conf ~/.tmux.conf
 # fish
 ln -nfs $PWD/.config/fish ~/.config/fish
 # neovim
