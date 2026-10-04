@@ -79,16 +79,9 @@ set FZF_CTRL_T_OPTS '--preview "bat --color=always --style=header,grid --line-ra
 #     exec nsenter --target (pidof systemd) --all su - $LOGNAME
 # end
 
-### execute tmux ###
-# execute only first shell
-if [ $SHLVL -eq 1 ]
-    # attach session
-    tmux a -t main
-    set tmux_return $status
-    # create session if it fail
-    if [ $tmux_return -eq 1 ]
-        tmux new-session -s main
-    end
+### Auto-attach to default tmux session (create "main" if missing) ###
+if status is-interactive; and test -z "$TMUX"; and command -v tmux >/dev/null
+    exec tmux new-session -A -s main
 end
 
 set -q GHCUP_INSTALL_BASE_PREFIX[1]; or set GHCUP_INSTALL_BASE_PREFIX $HOME ; set -gx PATH $HOME/.cabal/bin /home/ryo/.ghcup/bin $PATH # ghcup-env

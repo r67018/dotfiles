@@ -158,10 +158,9 @@ bindkey '^R' fzf-history-widget
   'unset' '__fzf_key_bindings_options'
 }
 
-# start tmux session
+# Auto-attach to the default tmux session (create "main" if missing).
 # ref: https://unix.stackexchange.com/questions/43601/how-can-i-set-my-default-shell-to-start-up-tmux
-if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-  # exec tmux
+if [[ -o interactive ]] && [[ -z ${TMUX:-} ]] && command -v tmux >/dev/null; then
   exec tmux new-session -A -s main
 fi
 
