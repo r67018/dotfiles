@@ -34,7 +34,6 @@
     "discord"
     "slack"
     "microsoft-teams"
-    "cloudflare-warp"
     "codex-app"
     "adobe-acrobat-reader"
     "proton-drive"
