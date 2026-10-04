@@ -58,9 +58,13 @@ in
   };
 
   system.activationScripts.postActivation.text = ''
-    # azooKey is selected as a regular macOS input source.
+    # azooKey is a regular macOS input source (Ctrl+Space / Ctrl+Option+Space).
     sudo -u "${primaryUser}" /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 '{ enabled = 1; value = { parameters = (32, 49, 262144); type = standard; }; }'
     sudo -u "${primaryUser}" /usr/bin/defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 '{ enabled = 1; value = { parameters = (32, 49, 786432); type = standard; }; }'
+
+    # Keep ABC unless the input source is switched explicitly. Otherwise each
+    # text field restores azooKey from its last document context.
+    sudo -u "${primaryUser}" /usr/bin/defaults write com.apple.HIToolbox AppleGlobalTextInputProperties -dict TextInputGlobalPropertyPerContextInput -int 0
 
     # Stop the annoying "Application is damaged" or "can't be opened" for downloaded apps
     echo "Removing quarantine attribute from applications..."
