@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 {
   programs.git = {
     enable = true;
@@ -6,6 +6,16 @@
       user = {
         name = "Ryosei Goto";
         email = "contact@r67018.com";
+      };
+      credential = {
+        "https://origin.cursor.com".helper = [
+          ""
+          "!${config.home.homeDirectory}/.local/bin/origin credential-helper"
+        ];
+        "https://origin.cursor.com/git".helper = [
+          ""
+          "!${config.home.homeDirectory}/.local/bin/origin credential-helper"
+        ];
       };
       init = {
         defaultBranch = "main";
