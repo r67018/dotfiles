@@ -31,6 +31,7 @@ in
 {
   imports = [
     ../../modules/thunderbird-cli.nix
+    ../../modules/hammerspoon.nix
   ];
 
   home.packages = [
