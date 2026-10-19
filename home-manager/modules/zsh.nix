@@ -26,7 +26,7 @@
       zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
       # Auto-attach to the default tmux session (create "main" if missing).
-      # Do not gate on SHLVL: GUI terminals (e.g. Aerospace → bash → kitty) start zsh with SHLVL>1.
+      # Do not gate on SHLVL: GUI terminals (e.g. bash → kitty) start zsh with SHLVL>1.
       if [[ -o interactive ]] && [[ -z ''${TMUX:-} ]] && command -v tmux >/dev/null; then
         exec tmux new-session -A -s main
       fi
