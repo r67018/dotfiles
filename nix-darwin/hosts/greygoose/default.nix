@@ -15,6 +15,11 @@
     }
   ];
 
+  # Virtual displays and VITURE suppress Touch ID for sudo unless this is set.
+  system.activationScripts.ignoreArd.text = ''
+    /usr/bin/sudo -u ryosei /usr/bin/defaults write /Users/ryosei/Library/Preferences/com.apple.security.authorization.plist ignoreArd -bool true
+  '';
+
   system.defaults.dock.persistent-apps = [
     "/Applications/Google Chrome.app"
     "/Applications/kitty.app"
