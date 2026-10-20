@@ -36,7 +36,6 @@
 
   homebrew.casks = [
     "betterdisplay"
-    "hammerspoon"
     "thunderbird"
     "discord"
     "slack"
