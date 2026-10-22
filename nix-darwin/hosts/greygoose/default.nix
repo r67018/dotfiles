@@ -35,6 +35,7 @@
   ];
 
   homebrew.casks = [
+    "tailscale-app"
     "betterdisplay"
     "thunderbird"
     "discord"
