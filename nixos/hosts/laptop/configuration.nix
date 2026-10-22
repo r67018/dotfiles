@@ -1,5 +1,7 @@
-{ ... }:
+{ lib, ... }:
 {
+  networking.hostName = lib.mkForce "nixos";
+
   services.xremap = {
     config = {
       modmap = [

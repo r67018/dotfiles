@@ -16,7 +16,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "belvedere";
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -220,7 +220,6 @@
       "wheel"
       "inputs"
       "docker"
-      "adbusers"
     ];
     shell = pkgs.zsh;
     packages = with pkgs; [
@@ -275,9 +274,6 @@
         lh = "ls -lh";
         grep = "grep --color=auto";
       };
-    };
-    adb = {
-      enable = true;
     };
     firefox = {
       enable = true;
