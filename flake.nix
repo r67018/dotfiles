@@ -29,6 +29,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # xremap
+    xremap = {
+      url = "github:xremap/nix-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Zen Browser
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
@@ -67,6 +73,30 @@
       };
     in
     {
+      nixosConfigurations = {
+        belvedere = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./nixos/configuration.nix
+            ./nixos/hosts/desktop/hardware-configuration.nix
+            ./nixos/hosts/desktop/configuration.nix
+            inputs.sops-nix.nixosModules.sops
+          ];
+        };
+
+        laptop = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./nixos/configuration.nix
+            ./nixos/hosts/laptop/configuration.nix
+            ./nixos/hosts/laptop/hardware-configuration.nix
+            inputs.sops-nix.nixosModules.sops
+          ];
+        };
+      };
+
       # macOS (nix-darwin) configurations
       darwinConfigurations = {
         "greygoose" = nix-darwin.lib.darwinSystem {
