@@ -1,5 +1,7 @@
-{ config, ... }:
+{ config, lib, ... }:
 {
+  networking.hostName = lib.mkForce "belvedere";
+
   # Tailscale に入っている相手だけ SSH できるようにする。
   services.tailscale.enable = true;
 
