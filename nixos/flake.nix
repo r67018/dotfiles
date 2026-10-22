@@ -16,6 +16,7 @@
         modules = [
           ./configuration.nix
           ./hosts/desktop/hardware-configuration.nix
+          ./hosts/desktop/configuration.nix
           inputs.sops-nix.nixosModules.sops
         ];
         specialArgs = {
