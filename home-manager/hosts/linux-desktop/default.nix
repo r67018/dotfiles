@@ -24,6 +24,7 @@
       slurp
       wl-clipboard
       seahorse # Keyring
+      code-cursor
     ];
 
     home.sessionVariables = {
