@@ -49,7 +49,7 @@
 
     # manaba reminder
     manaba-reminder = {
-      url = "github:r67018/grokbot-manaba-reminder";
+      url = "git+ssh://git@github.com/r67018/grokbot-manaba-reminder";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
