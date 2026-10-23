@@ -90,6 +90,7 @@
           specialArgs = { inherit inputs; };
           modules = [
             ./nixos/configuration.nix
+            ./nixos/desktop.nix
             ./nixos/hosts/laptop/configuration.nix
             ./nixos/hosts/laptop/hardware-configuration.nix
             inputs.sops-nix.nixosModules.sops
