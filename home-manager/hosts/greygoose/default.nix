@@ -29,10 +29,6 @@ let
 in
 
 {
-  imports = [
-    ../../modules/thunderbird-cli.nix
-  ];
-
   home.packages = [
     nodejsLatestLts
   ];

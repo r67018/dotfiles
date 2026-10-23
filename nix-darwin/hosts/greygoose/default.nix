@@ -37,7 +37,6 @@
   homebrew.casks = [
     "tailscale-app"
     "betterdisplay"
-    "thunderbird"
     "discord"
     "slack"
     "microsoft-teams"

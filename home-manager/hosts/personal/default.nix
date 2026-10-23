@@ -7,7 +7,6 @@
 
   home.packages = lib.mkIf pkgs.stdenv.isLinux (with pkgs; [
     google-chrome
-    thunderbird
     rquickshare
     jetbrains-toolbox
     bottles

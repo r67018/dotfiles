@@ -15,9 +15,6 @@
         {
           command = "1password";
         }
-        {
-          command = "thunderbird";
-        }
       ];
       keybindings = lib.mkOptionDefault {
         "${config.modifier}+d" = "exec wofi --show drun";
