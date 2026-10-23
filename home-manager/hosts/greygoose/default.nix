@@ -36,4 +36,8 @@ in
   home.packages = [
     nodejsLatestLts
   ];
+
+  programs.ssh.matchBlocks.belvedere = {
+    forwardAgent = true;
+  };
 }
