@@ -7,12 +7,6 @@
 
   environment.systemPackages = [ pkgs.pnpm ];
 
-  system.defaults.dock.persistent-apps = [
-    "/Applications/Zen Browser.app"
-    "/Applications/Alacritty.app"
-    "/Applications/Slack.app"
-  ];
-
   homebrew.casks = [
     "zen"
     "slack"

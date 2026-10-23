@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 let
   primaryUser = config.system.primaryUser;
 in
@@ -47,10 +47,6 @@ in
     NSGlobalDomain.KeyRepeat = 2;
     NSGlobalDomain."com.apple.keyboard.fnState" = true;
     NSGlobalDomain.AppleInterfaceStyle = "Dark";
-    dock.persistent-apps = lib.mkDefault [
-      "/Applications/kitty.app"
-      "/Applications/1Password.app"
-    ];
     NSGlobalDomain."com.apple.mouse.tapBehavior" = 1;
   };
 

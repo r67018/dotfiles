@@ -20,20 +20,6 @@
     /usr/bin/sudo -u ryosei /usr/bin/defaults write /Users/ryosei/Library/Preferences/com.apple.security.authorization.plist ignoreArd -bool true
   '';
 
-  system.defaults.dock.persistent-apps = [
-    "/Applications/Google Chrome.app"
-    "/Applications/kitty.app"
-    "/Applications/1Password.app"
-    "/Applications/Thunderbird.app"
-    "/Applications/Discord.app"
-    "/Applications/Slack.app"
-    "/Applications/Microsoft Teams.app"
-    "/Applications/LINE.app"
-    "/Applications/Notion.app"
-    "/Applications/Claude.app"
-    "/Applications/Codex.app"
-  ];
-
   homebrew.casks = [
     "tailscale-app"
     "betterdisplay"
