@@ -50,6 +50,11 @@
       enableCompletion = true;
       autosuggestions.enable = true;
       syntaxHighlighting.enable = true;
+      # 起動ファイルが1つも無いと zsh が zsh-newuser-install を実行する。
+      # /etc/zshenv で先に空の関数を定義して、そのウィザードを止める。
+      shellInit = ''
+        zsh-newuser-install() { : }
+      '';
       shellAliases = {
         ls = "ls --color=auto";
         la = "ls -A";
