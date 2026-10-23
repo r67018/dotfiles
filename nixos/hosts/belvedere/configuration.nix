@@ -22,6 +22,10 @@
   # sudo は転送された SSH エージェントの署名で通す。
   # PAM には auth sufficient pam_ssh_agent_auth.so が入り、
   # sudoers は SSH_AUTH_SOCK を残す。署名に失敗したときはパスワードに戻る。
-  # 公開鍵は /etc/ssh/authorized_keys.d/ryosei に置く。
+  # 公開鍵が無いとエージェントに署名を頼まず、Touch ID も出ない。
   security.pam.sshAgentAuth.enable = true;
+
+  environment.etc."ssh/authorized_keys.d/ryosei".text = ''
+    ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINfs8/T24RWsi7XqZfGTgWp9PvmQ91aODX6ZlDQ0Uxek ryosei@belvedere
+  '';
 }
