@@ -46,6 +46,12 @@
       url = "github:sadjow/codex-cli-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # manaba reminder
+    manaba-reminder = {
+      url = "github:r67018/grokbot-manaba-reminder";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -75,6 +81,7 @@
             ./nixos/hosts/belvedere/hardware-configuration.nix
             ./nixos/hosts/belvedere/configuration.nix
             inputs.sops-nix.nixosModules.sops
+            inputs.manaba-reminder.nixosModules.default
           ];
         };
       };
