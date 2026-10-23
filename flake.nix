@@ -29,12 +29,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # xremap
-    xremap = {
-      url = "github:xremap/nix-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # Zen Browser
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake";
@@ -69,7 +63,6 @@
         greygoose = import ./home-manager/hosts/greygoose/default.nix;
         personal = import ./home-manager/hosts/personal/default.nix;
         work = import ./home-manager/hosts/work/default.nix;
-        linux-desktop = import ./home-manager/hosts/linux-desktop/default.nix;
       };
     in
     {
@@ -79,20 +72,8 @@
           specialArgs = { inherit inputs; };
           modules = [
             ./nixos/configuration.nix
-            ./nixos/hosts/desktop/hardware-configuration.nix
-            ./nixos/hosts/desktop/configuration.nix
-            inputs.sops-nix.nixosModules.sops
-          ];
-        };
-
-        laptop = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          specialArgs = { inherit inputs; };
-          modules = [
-            ./nixos/configuration.nix
-            ./nixos/desktop.nix
-            ./nixos/hosts/laptop/configuration.nix
-            ./nixos/hosts/laptop/hardware-configuration.nix
+            ./nixos/hosts/belvedere/hardware-configuration.nix
+            ./nixos/hosts/belvedere/configuration.nix
             inputs.sops-nix.nixosModules.sops
           ];
         };
@@ -147,17 +128,6 @@
               };
               home-manager.extraSpecialArgs = { inherit inputs; };
             }
-          ];
-        };
-      };
-
-      # Linux / Home Manager only configurations
-      homeConfigurations = {
-        "ryosei" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages.x86_64-linux;
-          extraSpecialArgs = { inherit inputs; };
-          modules = [
-            ./home-manager/home.nix
           ];
         };
       };
