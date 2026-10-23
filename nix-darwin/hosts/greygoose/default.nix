@@ -21,6 +21,7 @@
   '';
 
   homebrew.casks = [
+    "brave-browser"
     "tailscale-app"
     "betterdisplay"
     "discord"
