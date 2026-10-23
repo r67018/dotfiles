@@ -122,6 +122,26 @@
         "type": "github"
       }
     },
+    "manaba-reminder": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792778456,
+        "narHash": "sha256-4zXpQsZ41ixBxHI6MehA07sG/KJXlQOj2NKT5V2iong=",
+        "owner": "r67018",
+        "repo": "grokbot-manaba-reminder",
+        "rev": "f5042b96dd51ac99a45db9e05665dd604e647d1e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "r67018",
+        "repo": "grokbot-manaba-reminder",
+        "type": "github"
+      }
+    },
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
@@ -185,6 +205,7 @@
         "claude-code": "claude-code",
         "codex-cli": "codex-cli",
         "home-manager": "home-manager",
+        "manaba-reminder": "manaba-reminder",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs",
         "nixvim": "nixvim",

@@ -1,8 +1,28 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 {
   environment.systemPackages = [
     pkgs.nodejs_26
+    pkgs._1password-cli
   ];
+
+  # configuration.nix の allowUnfree = true はそのまま残す。
+  # 1password-cli（属性名は _1password-cli）だけを名前で追加で許可する。
+  nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (lib.getName pkg) [
+      "1password-cli"
+    ];
+
+  # トークンは既定の /etc/manaba-reminder/op-service-account-token に手で置く。
+  services.manaba-reminder = {
+    enable = true;
+    opPackage = pkgs._1password-cli;
+    opEnv = {
+      MANABA_USERNAME = "op://Belvedere/manaba/username";
+      MANABA_PASSWORD = "op://Belvedere/manaba/password";
+      WEBHOOK_URL = "op://Belvedere/grokbot-manaba-reminder/url";
+      WEBHOOK_AUTHORIZATION = "op://Belvedere/grokbot-manaba-reminder/credential";
+    };
+  };
 
   # SSH は Tailscale SSH が受ける。sshd は起動しない。
   services.tailscale = {
