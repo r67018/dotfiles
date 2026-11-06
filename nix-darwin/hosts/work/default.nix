@@ -15,6 +15,7 @@
     "openvpn-connect"
     "codex-app"
     "cursor"
+    "obsidian"
   ];
 
   homebrew.onActivation.autoUpdate = true;
