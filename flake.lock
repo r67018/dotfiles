@@ -129,17 +129,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1792778456,
-        "narHash": "sha256-4zXpQsZ41ixBxHI6MehA07sG/KJXlQOj2NKT5V2iong=",
-        "owner": "r67018",
-        "repo": "grokbot-manaba-reminder",
-        "rev": "f5042b96dd51ac99a45db9e05665dd604e647d1e",
-        "type": "github"
+        "lastModified": 1792783377,
+        "narHash": "sha256-hAqIX6dEIRVGpL/ESF1eGPiOdiV8rJW3zi0gZufuxss=",
+        "ref": "refs/heads/main",
+        "rev": "eeeac45ec08f7b6e909e424f832d9dd3c7e3e9a4",
+        "revCount": 12,
+        "type": "git",
+        "url": "ssh://git@github.com/r67018/grokbot-manaba-reminder"
       },
       "original": {
-        "owner": "r67018",
-        "repo": "grokbot-manaba-reminder",
-        "type": "github"
+        "type": "git",
+        "url": "ssh://git@github.com/r67018/grokbot-manaba-reminder"
       }
     },
     "nix-darwin": {
