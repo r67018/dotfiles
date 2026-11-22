@@ -124,6 +124,7 @@ in
       "kitty"
       "claude"
       "chatgpt"
+      "google-gemini"
       "jetbrains-toolbox"
       # Ice: menu bar manager
       "jordanbaird-ice"
