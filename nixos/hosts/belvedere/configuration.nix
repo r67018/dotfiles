@@ -5,6 +5,11 @@ let
   '';
 in
 {
+  # AMD FCH SATA (1022:7901) と SD Ultra 3D (fw 52008100) の組み合わせで
+  # med_power_with_dipm からの復帰時に ATA bus error (Emask 0x10 / CommWake) が頻発するため、
+  # SATA Link Power Management を max_performance (1) に固定する。
+  boot.kernelParams = [ "ahci.mobile_lpm_policy=1" ];
+
   environment.systemPackages = [
     pkgs.nodejs_26
     pkgs._1password-cli
