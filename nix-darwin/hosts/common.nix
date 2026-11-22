@@ -72,6 +72,26 @@ in
     # text field restores the Japanese input source from its last document context.
     sudo -u "${primaryUser}" /usr/bin/defaults write com.apple.HIToolbox AppleGlobalTextInputProperties -dict TextInputGlobalPropertyPerContextInput -int 0
 
+    # Re-add Meltype to AppleEnabledInputSources after the HIToolbox write above.
+    # On macOS 27, TISEnableInputSource often does not persist this list, so the
+    # input menu can drop Meltype even though Meltype.app is still installed.
+    sudo -u "${primaryUser}" /bin/bash -c '
+      id=io.github.yksr-melt.inputmethod.Meltype
+      mode=io.github.yksr-melt.inputmethod.Meltype.Japanese
+      app="$HOME/Library/Input Methods/Meltype.app"
+      if [ -d "$app" ]; then
+        if ! /usr/bin/defaults read com.apple.HIToolbox AppleEnabledInputSources 2>/dev/null | /usr/bin/grep -q "$id"; then
+          /usr/bin/defaults write com.apple.HIToolbox AppleEnabledInputSources -array-add \
+            "<dict><key>Bundle ID</key><string>$id</string><key>InputSourceKind</key><string>Keyboard Input Method</string></dict>" \
+            "<dict><key>Bundle ID</key><string>$id</string><key>Input Mode</key><string>$mode</string><key>InputSourceKind</key><string>Input Mode</string></dict>"
+        fi
+        if [ -x "$app/Contents/MacOS/MeltypeRegisterInputSource" ]; then
+          "$app/Contents/MacOS/MeltypeRegisterInputSource" || true
+        fi
+        /usr/bin/killall TextInputMenuAgent 2>/dev/null || true
+      fi
+    '
+
     # Stop the annoying "Application is damaged" or "can't be opened" for downloaded apps
     echo "Removing quarantine attribute from applications..."
     apps=(
