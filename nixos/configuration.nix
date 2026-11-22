@@ -38,7 +38,21 @@
   nixpkgs.config.allowUnfree = true;
 
   programs = {
-    git.enable = true;
+    git = {
+      enable = true;
+      config = {
+        user = {
+          name = "Ryosei Goto";
+          email = "contact@r67018.com";
+        };
+        init = {
+          defaultBranch = "main";
+        };
+        pull = {
+          rebase = true;
+        };
+      };
+    };
     neovim = {
       enable = true;
       defaultEditor = true;
