@@ -10,6 +10,9 @@ in
     pkgs._1password-cli
   ];
 
+  # Antigravity のリモート SSH Language Server など、汎用 Linux 向けの動的リンクバイナリを実行できるようにする。
+  programs.nix-ld.enable = true;
+
   # configuration.nix の allowUnfree = true はそのまま残す。
   # 1password-cli（属性名は _1password-cli）だけを名前で追加で許可する。
   nixpkgs.config.allowUnfreePredicate = pkg:
