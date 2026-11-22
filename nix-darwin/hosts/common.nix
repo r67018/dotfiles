@@ -18,7 +18,17 @@ in
   ];
 
   fonts.packages = with pkgs; [
-    jetbrains-mono
+    # JetBrains Mono: static TTF only. Having the OTF copies (and the variable
+    # [wght] files) installed alongside the same family confuses Affinity.
+    (runCommand "jetbrains-mono-ttf-${jetbrains-mono.version}" { } ''
+      mkdir -p $out/share/fonts/truetype
+      for f in ${jetbrains-mono}/share/fonts/truetype/*.ttf; do
+        case "$(basename "$f")" in
+          *"["*) ;;
+          *) cp "$f" $out/share/fonts/truetype/ ;;
+        esac
+      done
+    '')
     nerd-fonts.jetbrains-mono
     nerd-fonts.symbols-only
     noto-fonts
