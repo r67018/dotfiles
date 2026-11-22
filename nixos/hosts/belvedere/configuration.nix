@@ -28,6 +28,11 @@ in
   # トークンは既定の /etc/manaba-reminder/op-service-account-token に手で置く。
   services.manaba-reminder = {
     enable = true;
+    schedule = [
+      "*-*-* 12:00:00 Asia/Tokyo"
+      "*-*-* 17:00:00 Asia/Tokyo"
+      "*-*-* 21:00:00 Asia/Tokyo"
+    ];
     opPackage = pkgs._1password-cli;
     opEnv = {
       MANABA_USERNAME = "op://Belvedere/manaba/username";
