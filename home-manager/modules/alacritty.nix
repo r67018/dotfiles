@@ -2,7 +2,7 @@
 {
   programs.alacritty = {
     enable = true;
-    package = if pkgs.stdenv.isDarwin then pkgs.runCommand "alacritty-dummy" {} "mkdir $out" else pkgs.alacritty;
+    package = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.runCommand "alacritty-dummy" {} "mkdir $out" else pkgs.alacritty;
     settings = {
       font = {
         normal = {

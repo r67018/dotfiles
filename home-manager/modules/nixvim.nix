@@ -1,8 +1,10 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 {
   programs.nixvim = {
     enable = true;
+    # follows で nixpkgs を揃えていることを明示する。省略すると nixvim が warning を出す。
+    nixpkgs.source = inputs.nixpkgs;
     colorscheme = "iceberg";
     globals = {
       mapleader = " ";

@@ -9,7 +9,7 @@
       grep = "rg";
       vi = "nvim";
       vim = "nvim";
-    } // (if pkgs.stdenv.isDarwin then {
+    } // (if pkgs.stdenv.hostPlatform.isDarwin then {
       ls = "/bin/ls -G";
       ll = "/bin/ls -alFG";
       la = "/bin/ls -AG";

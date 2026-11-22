@@ -33,7 +33,7 @@ in
     nodejsLatestLts
   ];
 
-  programs.ssh.matchBlocks.belvedere = {
-    forwardAgent = true;
+  programs.ssh.settings.belvedere = {
+    ForwardAgent = true;
   };
 }

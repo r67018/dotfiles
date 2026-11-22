@@ -5,7 +5,7 @@
     ../../modules/zen-browser.nix
   ];
 
-  home.packages = lib.mkIf pkgs.stdenv.isLinux (with pkgs; [
+  home.packages = lib.mkIf pkgs.stdenv.hostPlatform.isLinux (with pkgs; [
     google-chrome
     rquickshare
     jetbrains-toolbox

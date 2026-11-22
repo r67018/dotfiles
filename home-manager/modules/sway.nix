@@ -1,6 +1,6 @@
 { pkgs, lib, ... }:
 {
-  wayland.windowManager.sway = lib.mkIf pkgs.stdenv.isLinux (rec {
+  wayland.windowManager.sway = lib.mkIf pkgs.stdenv.hostPlatform.isLinux (rec {
     enable = true;
     config = {
       modifier = "Alt";

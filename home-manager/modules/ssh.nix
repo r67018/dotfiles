@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
   # Use different path for macOS and Linux
-  onePassPath = if pkgs.stdenv.isDarwin
+  onePassPath = if pkgs.stdenv.hostPlatform.isDarwin
     then "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\""
     else "~/.1password/agent.sock";
 in
@@ -11,11 +11,11 @@ in
     enable = true;
     enableDefaultConfig = false;
     includes = [ "config.d/*" ];
-    matchBlocks = {
+    settings = {
       "*" = {};
       "github.com" = {
-        hostname = "github.com";
-        user = "git";
+        HostName = "github.com";
+        User = "git";
       };
     };
     extraConfig = ''

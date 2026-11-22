@@ -2,7 +2,7 @@
 {
   programs.kitty = {
     enable = true;
-    package = if pkgs.stdenv.isDarwin then pkgs.runCommand "kitty-dummy" {} "mkdir $out" else pkgs.kitty;
+    package = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.runCommand "kitty-dummy" {} "mkdir $out" else pkgs.kitty;
     settings = {
       font_family = "JetBrainsMono Nerd Font Light";
       font_size = 12;
@@ -60,7 +60,7 @@
   # services also hands the app / as its working directory, so --directory is
   # needed too or that first window opens at the filesystem root. The path has to
   # be spelled out: kitty splits this file with shell syntax but does not expand ~.
-  xdg.configFile."kitty/macos-launch-services-cmdline" = lib.mkIf pkgs.stdenv.isDarwin {
+  xdg.configFile."kitty/macos-launch-services-cmdline" = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
     text = "--single-instance --directory ${config.home.homeDirectory}\n";
   };
 

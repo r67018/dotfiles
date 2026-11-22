@@ -1,6 +1,6 @@
 { pkgs, lib, ... }:
 {
-  home.packages = lib.mkIf pkgs.stdenv.isLinux (with pkgs; [
+  home.packages = lib.mkIf pkgs.stdenv.hostPlatform.isLinux (with pkgs; [
     slack
     # microsoft-teams
   ]);
