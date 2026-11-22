@@ -129,6 +129,8 @@ in
       "jetbrains-toolbox"
       # Ice: menu bar manager
       "jordanbaird-ice"
+      # Morisawa Fonts: font sync app
+      "morisawa-desktop-manager"
     ];
     brews = [
       "mas"
