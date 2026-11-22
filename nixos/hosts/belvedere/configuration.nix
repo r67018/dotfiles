@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
+let
+  ryoseiAuthorizedKeys = pkgs.writeText "ryosei-authorized-keys" ''
+    ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINfs8/T24RWsi7XqZfGTgWp9PvmQ91aODX6ZlDQ0Uxek ryosei@belvedere
+  '';
+in
 {
   environment.systemPackages = [
     pkgs.nodejs_26
@@ -25,9 +30,12 @@
   };
 
   # SSH は Tailscale SSH が受ける。sshd は起動しない。
+  # Tailworm (TS-2026-014/015) の修正は 1.104.4 以降。locked nixpkgs は 1.104.1 のままなので、
+  # 本体の flake 入力は動かさず、nixpkgs-unstable の tailscale だけ使う。
   services.tailscale = {
     enable = true;
     extraSetFlags = [ "--ssh" ];
+    package = inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.tailscale;
   };
 
   networking.firewall = {
@@ -45,7 +53,14 @@
   # 公開鍵が無いとエージェントに署名を頼まず、Touch ID も出ない。
   security.pam.sshAgentAuth.enable = true;
 
-  environment.etc."ssh/authorized_keys.d/ryosei".text = ''
-    ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINfs8/T24RWsi7XqZfGTgWp9PvmQ91aODX6ZlDQ0Uxek ryosei@belvedere
-  '';
+  # environment.etc だと /nix/store への symlink になり、pam_ssh_agent_auth が
+  # 「bad ownership or modes for directory /nix/store」で拒否する。
+  # 通常ファイルとしてコピーすれば、検査対象の親ディレクトリは /etc/ssh になる。
+  system.activationScripts.pamSshAgentAuthKeys = {
+    deps = [ "etc" ];
+    text = ''
+      install -d -m 755 -o root -g root /etc/ssh/authorized_keys.d
+      install -m 644 -o root -g root ${ryoseiAuthorizedKeys} /etc/ssh/authorized_keys.d/ryosei
+    '';
+  };
 }

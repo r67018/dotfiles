@@ -5,6 +5,10 @@
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
+    # Current nixos-unstable, used only to pin newer individual packages
+    # (currently Tailscale) without updating the locked system nixpkgs.
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+
     # nix-darwin
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin";
