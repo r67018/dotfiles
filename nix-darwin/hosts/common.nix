@@ -125,6 +125,7 @@ in
       "claude"
       "chatgpt"
       "google-gemini"
+      "proton-mail-bridge"
       "jetbrains-toolbox"
       # Ice: menu bar manager
       "jordanbaird-ice"
