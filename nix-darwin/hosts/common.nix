@@ -37,6 +37,9 @@ in
     newcomputermodern
   ];
 
+  # 1Password CLI (installed to /usr/local/bin/op for desktop app integration)
+  programs._1password.enable = true;
+
   # Authenticate sudo with Touch ID (reattach makes it work inside tmux too)
   security.pam.services.sudo_local = {
     enable = true;
