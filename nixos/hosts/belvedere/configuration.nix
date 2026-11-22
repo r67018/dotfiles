@@ -45,8 +45,11 @@ in
     # 直接接続用。閉じたままでも中継経由では繋がる。
     allowedUDPPorts = [ config.services.tailscale.port ];
     # Tailscale SSH は tailscale0 の 22 番で受ける。
+    # IMAP/SMTP は protonmail-bridge.nix が同じインタフェースに足す。
     interfaces."tailscale0".allowedTCPPorts = [ 22 ];
   };
+
+  imports = [ ./protonmail-bridge.nix ];
 
   services.openssh.enable = false;
 
