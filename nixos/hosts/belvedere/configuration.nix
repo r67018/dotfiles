@@ -37,7 +37,11 @@ in
   # 本体の flake 入力は動かさず、nixpkgs-unstable の tailscale だけ使う。
   services.tailscale = {
     enable = true;
-    extraSetFlags = [ "--ssh" ];
+    useRoutingFeatures = "server";
+    extraSetFlags = [
+      "--ssh"
+      "--advertise-exit-node"
+    ];
     package = inputs.nixpkgs-unstable.legacyPackages.${pkgs.stdenv.hostPlatform.system}.tailscale;
   };
 
