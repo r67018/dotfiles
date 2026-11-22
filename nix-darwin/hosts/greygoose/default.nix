@@ -28,6 +28,7 @@
     "slack"
     "microsoft-teams"
     "codex-app"
+    "antigravity"
     "obsidian"
     "adobe-acrobat-reader"
     "proton-drive"
