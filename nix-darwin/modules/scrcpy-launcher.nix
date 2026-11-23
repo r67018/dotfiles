@@ -20,9 +20,9 @@ let
       <key>CFBundleIdentifier</key>
       <string>dev.r67018.scrcpy-launcher</string>
       <key>CFBundleVersion</key>
-      <string>1.1</string>
+      <string>1.2</string>
       <key>CFBundleShortVersionString</key>
-      <string>1.1</string>
+      <string>1.2</string>
       <key>CFBundlePackageType</key>
       <string>APPL</string>
       <key>CFBundleExecutable</key>
@@ -51,6 +51,26 @@ let
     DSCACHE=/usr/bin/dscacheutil
 
     "$ADB" start-server >/dev/null
+
+    # If no device is already ready, restart adb as a child of this app.
+    # A detached server started by a process without Local Network permission
+    # fails with "No route to host" on Wi-Fi, even when the phone is on the
+    # same network and Scrcpy/bash are allowed. adb itself may not appear in
+    # System Settings > Local Network; keeping the server in this process tree
+    # lets the already-granted permission apply to the connect.
+    restart_adb_server_for_local_network() {
+      "$ADB" kill-server >/dev/null 2>&1 || true
+      "$ADB" server nodaemon >/dev/null 2>&1 &
+      local i=0
+      while [ "$i" -lt 30 ]; do
+        if /usr/bin/nc -z 127.0.0.1 5037 2>/dev/null; then
+          return 0
+        fi
+        sleep 0.1
+        i=$((i + 1))
+      done
+      "$ADB" start-server >/dev/null
+    }
 
     ready_serials() {
       "$ADB" devices | "$AWK" 'NR>1 && $2 == "device" { print $1 }'
@@ -152,6 +172,7 @@ let
 
     disconnect_stale
     if [ -z "$(ready_serials)" ]; then
+      restart_adb_server_for_local_network
       # mDNS records can take a moment to appear after joining Wi-Fi.
       attempt=0
       while [ "$attempt" -lt 3 ] && [ -z "$(ready_serials)" ]; do
