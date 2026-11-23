@@ -143,6 +143,8 @@ in
       "morisawa-desktop-manager"
       # SoloDisplay: turn off the built-in display when an external display is connected
       "solodisplay"
+      # Figma: design tool
+      "figma"
     ];
     brews = [
       "mas"
