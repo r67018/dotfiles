@@ -2,11 +2,16 @@
 let
   # Extra scrcpy flags. Leave empty to launch with defaults (plain `scrcpy`).
   # Example: scrcpyArgs = [ "--stay-awake" "--turn-screen-off" ];
+  # These are passed through the helper if we ever thread them; the helper
+  # currently launches scrcpy with no extra flags (same as an empty list).
   scrcpyArgs = [ ];
 
   # Preferred device serial or name when more than one is ready. Empty = first ready device.
   # Example: preferredDevice = "59131FDCR0084K";  # or "Pixel 10"
+  # Export as PREFERRED in the helper if set.
   preferredDevice = "";
+
+  bundleId = "dev.r67018.scrcpy-launcher";
 
   infoPlist = pkgs.writeText "Info.plist" ''
     <?xml version="1.0" encoding="UTF-8"?>
@@ -18,11 +23,11 @@ let
       <key>CFBundleDisplayName</key>
       <string>Scrcpy</string>
       <key>CFBundleIdentifier</key>
-      <string>dev.r67018.scrcpy-launcher</string>
+      <string>${bundleId}</string>
       <key>CFBundleVersion</key>
-      <string>1.2</string>
+      <string>1.3</string>
       <key>CFBundleShortVersionString</key>
-      <string>1.2</string>
+      <string>1.3</string>
       <key>CFBundlePackageType</key>
       <string>APPL</string>
       <key>CFBundleExecutable</key>
@@ -31,182 +36,83 @@ let
       <string>11.0</string>
       <key>NSHighResolutionCapable</key>
       <true/>
+      <key>NSLocalNetworkUsageDescription</key>
+      <string>Scrcpy が同じ Wi-Fi 上の Pixel に接続して、画面ミラーリングを行います。</string>
+      <key>NSBonjourServices</key>
+      <array>
+        <string>_adb-tls-connect._tcp</string>
+      </array>
     </dict>
     </plist>
   '';
 
-  launcher = pkgs.writeShellScript "Scrcpy" ''
-    set -euo pipefail
-    export PATH="${pkgs.android-tools}/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-    # Openscreen is the mdns backend official adb uses on macOS; this
-    # android-tools build still reports "mdns is not supported", so we
-    # also discover via dns-sd. Set the env in case a later adb starts supporting it.
-    export ADB_MDNS_OPENSCREEN=1
+  # Optional preferredDevice is exported for the helper; extra scrcpy flags
+  # are appended when the helper launches scrcpy.
+  preferredExport = lib.escapeShellArg preferredDevice;
+  scrcpyArgsShell = lib.escapeShellArgs scrcpyArgs;
 
-    ADB="${pkgs.android-tools}/bin/adb"
-    SCRCPY="${pkgs.scrcpy}/bin/scrcpy"
-    PREFERRED=${lib.escapeShellArg preferredDevice}
-    AWK=/usr/bin/awk
-    DNS_SD=/usr/bin/dns-sd
-    DSCACHE=/usr/bin/dscacheutil
+  scrcpyApp = pkgs.stdenv.mkDerivation {
+    pname = "scrcpy-app";
+    version = "1.3";
+    dontUnpack = true;
+    # stdenv darwin fixup re-applies linker ad-hoc signatures and would
+    # overwrite the bundle-id we set in installPhase.
+    dontFixup = true;
 
-    "$ADB" start-server >/dev/null
+    installPhase = ''
+      runHook preInstall
+      app=$out/Applications/Scrcpy.app
+      mkdir -p $app/Contents/MacOS $app/Contents/Resources
 
-    # If no device is already ready, restart adb as a child of this app.
-    # A detached server started by a process without Local Network permission
-    # fails with "No route to host" on Wi-Fi, even when the phone is on the
-    # same network and Scrcpy/bash are allowed. adb itself may not appear in
-    # System Settings > Local Network; keeping the server in this process tree
-    # lets the already-granted permission apply to the connect.
-    restart_adb_server_for_local_network() {
-      "$ADB" kill-server >/dev/null 2>&1 || true
-      "$ADB" server nodaemon >/dev/null 2>&1 &
-      local i=0
-      while [ "$i" -lt 30 ]; do
-        if /usr/bin/nc -z 127.0.0.1 5037 2>/dev/null; then
-          return 0
+      $CC -Os -Wl,-no_adhoc_codesign \
+        -DLAUNCH_BASH='"${pkgs.bash}/bin/bash"' \
+        -o $app/Contents/MacOS/Scrcpy \
+        ${./scrcpy-launcher-main.c}
+
+      # Copy the helper into the bundle so $0-relative paths find helpers/.
+      # A short preamble sets PREFERRED / extra flags from the nix module.
+      {
+        echo '#!/usr/bin/env bash'
+        echo "export PREFERRED=${preferredExport}"
+        echo "set -- ${scrcpyArgsShell} \"\$@\""
+        echo 'source "$0.helper"'
+      } > $app/Contents/Resources/launch.sh
+      cp ${./scrcpy-launcher-launch.sh} $app/Contents/Resources/launch.sh.helper
+      chmod +x $app/Contents/Resources/launch.sh $app/Contents/Resources/launch.sh.helper
+      # Prepending with `source` would re-run set/traps from the helper under
+      # $0=launch.sh (good). Strip the helper shebang; it's sourced.
+      /usr/bin/sed -i.bak '1{/^#!/d;}' $app/Contents/Resources/launch.sh.helper && rm -f $app/Contents/Resources/launch.sh.helper.bak
+      cp ${infoPlist} $app/Contents/Info.plist
+      printf 'APPL????' > $app/Contents/PkgInfo
+
+      # helpers/ is required: APFS is case-insensitive, so MacOS/scrcpy
+      # would overwrite the Scrcpy Mach-O. Re-sign copies with the app
+      # identifier so TCC groups Local Network use under "Scrcpy".
+      mkdir -p $app/Contents/MacOS/helpers
+      cp ${pkgs.android-tools}/bin/adb $app/Contents/MacOS/helpers/adb
+      cp ${pkgs.scrcpy}/bin/.scrcpy-wrapped $app/Contents/MacOS/helpers/scrcpy
+      chmod u+w $app/Contents/MacOS/Scrcpy \
+                $app/Contents/MacOS/helpers/adb \
+                $app/Contents/MacOS/helpers/scrcpy
+
+      sign() {
+        local bin="$1"
+        /usr/bin/codesign --remove-signature "$bin" 2>/dev/null || true
+        /usr/bin/codesign --sign - --force --identifier ${bundleId} "$bin"
+        ident=$(/usr/bin/codesign -dv "$bin" 2>&1 | /usr/bin/awk -F= '/^Identifier=/{print $2; exit}')
+        if [ "$ident" != "${bundleId}" ]; then
+          echo "codesign identifier mismatch for $bin: got '$ident'" >&2
+          /usr/bin/codesign -dv --verbose=4 "$bin" >&2 || true
+          exit 1
         fi
-        sleep 0.1
-        i=$((i + 1))
-      done
-      "$ADB" start-server >/dev/null
-    }
-
-    ready_serials() {
-      "$ADB" devices | "$AWK" 'NR>1 && $2 == "device" { print $1 }'
-    }
-
-    disconnect_stale() {
-      local serial state
-      while read -r serial state; do
-        [ -n "''${serial:-}" ] || continue
-        case "$state" in
-          offline|unknown)
-            "$ADB" disconnect "$serial" >/dev/null 2>&1 || true
-            ;;
-        esac
-      done < <("$ADB" devices | "$AWK" 'NR>1 && $1 != "" { print $1, $2 }')
-    }
-
-    pick_serial() {
-      local preferred="$1"
-      if [ -z "$preferred" ]; then
-        ready_serials | /usr/bin/head -n 1
-        return 0
-      fi
-      local pref_lc line serial rest
-      pref_lc=$(printf '%s' "$preferred" | /usr/bin/tr '[:upper:]' '[:lower:]' | /usr/bin/tr ' ' '_')
-      while read -r line; do
-        serial=$(printf '%s' "$line" | "$AWK" '{ print $1 }')
-        rest=$(printf '%s' "$line" | /usr/bin/tr '[:upper:]' '[:lower:]')
-        case "$rest" in
-          *"$pref_lc"*)
-            printf '%s\n' "$serial"
-            return 0
-            ;;
-        esac
-      done < <("$ADB" devices -l | "$AWK" 'NR>1 && $2 == "device" { print }')
-      ready_serials | /usr/bin/head -n 1
-    }
-
-    run_timed() {
-      local secs="$1" out="$2"
-      shift 2
-      "$@" >"$out" 2>&1 &
-      local pid=$!
-      sleep "$secs"
-      kill "$pid" 2>/dev/null || true
-      wait "$pid" 2>/dev/null || true
-    }
-
-    # Print unique ip:port targets for already-paired wireless debugging
-    # (_adb-tls-connect._tcp). Pairing services are ignored.
-    discover_targets() {
-      local tmp host port ip
-      tmp=$(/usr/bin/mktemp -d)
-
-      if "$ADB" mdns check >/dev/null 2>&1; then
-        "$ADB" mdns services 2>/dev/null | "$AWK" '
-          $0 ~ /_adb-tls-connect(\._tcp)?/ {
-            for (i = 1; i <= NF; i++) {
-              if ($i ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+$/) print $i
-            }
-          }
-        '
-      fi
-
-      run_timed 3 "$tmp/zone" "$DNS_SD" -Z _adb-tls-connect._tcp local.
-      while read -r port host; do
-        [ -n "$port" ] && [ -n "$host" ] || continue
-        ip=$("$DSCACHE" -q host -a name "$host" | "$AWK" '/^ip_address:/ { print $2; exit }')
-        if [ -z "$ip" ]; then
-          run_timed 2 "$tmp/a" "$DNS_SD" -G v4 "$host."
-          ip=$("$AWK" '{
-            for (i = 1; i <= NF; i++) {
-              if ($i ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/) { print $i; exit }
-            }
-          }' "$tmp/a")
-        fi
-        if [ -n "$ip" ]; then
-          printf '%s:%s\n' "$ip" "$port"
-        fi
-      done < <("$AWK" '
-        $2 == "SRV" {
-          port = $5
-          host = $6
-          sub(/\.$/, "", host)
-          print port, host
-        }
-      ' "$tmp/zone")
-
-      /bin/rm -rf "$tmp"
-    }
-
-    connect_discovered() {
-      local target
-      while read -r target; do
-        [ -n "$target" ] || continue
-        "$ADB" connect "$target" >/dev/null 2>&1 || true
-      done < <(discover_targets | /usr/bin/sort -u)
-    }
-
-    disconnect_stale
-    if [ -z "$(ready_serials)" ]; then
-      restart_adb_server_for_local_network
-      # mDNS records can take a moment to appear after joining Wi-Fi.
-      attempt=0
-      while [ "$attempt" -lt 3 ] && [ -z "$(ready_serials)" ]; do
-        disconnect_stale
-        connect_discovered
-        if [ -n "$(ready_serials)" ]; then
-          break
-        fi
-        attempt=$((attempt + 1))
-        sleep 1
-      done
-    fi
-    disconnect_stale
-
-    SERIAL=$(pick_serial "$PREFERRED")
-    if [ -z "$SERIAL" ]; then
-      /usr/bin/osascript -e 'display dialog "Pixel が見つかりません。Pixelで「ワイヤレス デバッグ」をオンにして同じWi-Fiにつなぐか、USBでつないでください。初めて使う場合は、先にワイヤレス デバッグのペアリングをしてください。" with title "Scrcpy" buttons {"OK"} default button "OK" with icon caution'
-      exit 1
-    fi
-
-    COUNT=$(ready_serials | /usr/bin/wc -l | /usr/bin/tr -d ' ')
-    if [ "$COUNT" -gt 1 ]; then
-      exec "$SCRCPY" -s "$SERIAL" ${lib.escapeShellArgs scrcpyArgs}
-    else
-      exec "$SCRCPY" ${lib.escapeShellArgs scrcpyArgs}
-    fi
-  '';
-
-  scrcpyApp = pkgs.runCommand "scrcpy-app" { } ''
-    mkdir -p $out/Applications/Scrcpy.app/Contents/MacOS
-    cp ${infoPlist} $out/Applications/Scrcpy.app/Contents/Info.plist
-    cp ${launcher} $out/Applications/Scrcpy.app/Contents/MacOS/Scrcpy
-    chmod +x $out/Applications/Scrcpy.app/Contents/MacOS/Scrcpy
-  '';
+      }
+      sign $app/Contents/MacOS/Scrcpy
+      sign $app/Contents/MacOS/helpers/adb
+      sign $app/Contents/MacOS/helpers/scrcpy
+      sign $app
+      runHook postInstall
+    '';
+  };
 in
 {
   environment.systemPackages = [ scrcpyApp ];
