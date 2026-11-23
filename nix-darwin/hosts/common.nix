@@ -3,6 +3,8 @@ let
   primaryUser = config.system.primaryUser;
 in
 {
+  imports = [ ../modules/scrcpy-launcher.nix ];
+
   # Determine Installer collision
   nix.enable = false;
   nix.settings.experimental-features = "nix-command flakes";
