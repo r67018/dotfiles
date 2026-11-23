@@ -1,2 +1,3 @@
 .config/nvim/**/packer_compiled.lua
 
+/result
