@@ -35,6 +35,7 @@
     "proton-meet"
     "proton-pass"
     "protonvpn"
+    "figma"
   ];
 
   homebrew.masApps = {
