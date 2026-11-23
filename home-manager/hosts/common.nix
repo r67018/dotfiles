@@ -28,8 +28,6 @@
     jq
     sops
     antigravity-cli
-    inputs.claude-code.packages.${pkgs.stdenv.hostPlatform.system}.claude-code
-    inputs.codex-cli.packages.${pkgs.stdenv.hostPlatform.system}.codex
 
     # Dev tools
     python3

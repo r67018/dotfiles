@@ -33,18 +33,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Claude Code
-    claude-code = {
-      url = "github:sadjow/claude-code-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # Codex CLI
-    codex-cli = {
-      url = "github:sadjow/codex-cli-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # manaba reminder
     manaba-reminder = {
       url = "git+ssh://git@github.com/r67018/grokbot-manaba-reminder";

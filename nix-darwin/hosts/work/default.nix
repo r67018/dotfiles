@@ -12,7 +12,6 @@
     "postman"
     "google-gemini"
     "openvpn-connect"
-    "codex-app"
     "cursor"
   ];
 
