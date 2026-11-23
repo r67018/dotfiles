@@ -3,8 +3,6 @@ let
   primaryUser = config.system.primaryUser;
 in
 {
-  imports = [ ../modules/scrcpy-launcher.nix ];
-
   # Determine Installer collision
   nix.enable = false;
   nix.settings.experimental-features = "nix-command flakes";
@@ -17,8 +15,7 @@ in
     pkgs.docker-compose
     pkgs.colima
     pkgs.tmux
-    # scrcpy: Android screen mirroring/control; android-tools puts adb on PATH
-    pkgs.scrcpy
+    # android-tools puts adb on PATH
     pkgs.android-tools
   ];
 
@@ -123,9 +120,6 @@ in
   # Homebrew
   homebrew = {
     enable = true;
-    taps = [
-      "fanckush/solodisplay"
-    ];
     casks = [
       "1password"
       "kitty"
@@ -137,12 +131,6 @@ in
       "handy"
       # Ice: menu bar manager
       "jordanbaird-ice"
-      # Logi Options+: Logitech mouse/keyboard customization
-      "logi-options+"
-      # Morisawa Fonts: font sync app
-      "morisawa-desktop-manager"
-      # SoloDisplay: turn off the built-in display when an external display is connected
-      "solodisplay"
     ];
     brews = [
       "mas"

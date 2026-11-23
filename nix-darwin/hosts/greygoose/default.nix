@@ -1,9 +1,16 @@
-{ ... }: {
+{ pkgs, ... }: {
+  imports = [ ../../modules/scrcpy-launcher.nix ];
+
   networking.hostName = "greygoose";
   networking.computerName = "greygoose";
 
   system.primaryUser = "ryosei";
   users.users."ryosei".home = "/Users/ryosei";
+
+  # scrcpy: Android screen mirroring/control (launcher module vendors adb)
+  environment.systemPackages = [
+    pkgs.scrcpy
+  ];
 
   # Keyboard settings
   system.keyboard.enableKeyMapping = true;
@@ -19,6 +26,10 @@
   system.activationScripts.ignoreArd.text = ''
     /usr/bin/sudo -u ryosei /usr/bin/defaults write /Users/ryosei/Library/Preferences/com.apple.security.authorization.plist ignoreArd -bool true
   '';
+
+  homebrew.taps = [
+    "fanckush/solodisplay"
+  ];
 
   homebrew.casks = [
     "brave-browser"
@@ -36,6 +47,12 @@
     "proton-pass"
     "protonvpn"
     "figma"
+    # Logi Options+: Logitech mouse/keyboard customization
+    "logi-options+"
+    # Morisawa Fonts: font sync app
+    "morisawa-desktop-manager"
+    # SoloDisplay: turn off the built-in display when an external display is connected
+    "solodisplay"
   ];
 
   homebrew.masApps = {
