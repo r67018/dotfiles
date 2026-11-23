@@ -122,6 +122,9 @@ in
   # Homebrew
   homebrew = {
     enable = true;
+    taps = [
+      "fanckush/solodisplay"
+    ];
     casks = [
       "1password"
       "kitty"
@@ -137,6 +140,8 @@ in
       "logi-options+"
       # Morisawa Fonts: font sync app
       "morisawa-desktop-manager"
+      # SoloDisplay: turn off the built-in display when an external display is connected
+      "solodisplay"
     ];
     brews = [
       "mas"
