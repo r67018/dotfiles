@@ -126,6 +126,8 @@ in
       "chatgpt"
       "google-gemini"
       "jetbrains-toolbox"
+      # Handy: local speech-to-text / dictation
+      "handy"
       # Ice: menu bar manager
       "jordanbaird-ice"
       # Logi Options+: Logitech mouse/keyboard customization
