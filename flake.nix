@@ -33,12 +33,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Zen Browser
-    zen-browser = {
-      url = "github:0xc000022070/zen-browser-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # Claude Code
     claude-code = {
       url = "github:sadjow/claude-code-nix";

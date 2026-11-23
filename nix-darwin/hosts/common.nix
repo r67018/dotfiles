@@ -101,7 +101,6 @@ in
     echo "Removing quarantine attribute from applications..."
     apps=(
       "/Applications/kitty.app"
-      "/Applications/Zen Browser.app"
       "/Applications/Discord.app"
       "/Applications/Slack.app"
       "/Applications/Microsoft Teams.app"

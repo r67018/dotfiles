@@ -1,10 +1,5 @@
-{ pkgs, inputs, lib, ... }:
+{ pkgs, lib, ... }:
 {
-  imports = [
-    inputs.zen-browser.homeModules.beta
-    ../../modules/zen-browser.nix
-  ];
-
   home.packages = lib.mkIf pkgs.stdenv.hostPlatform.isLinux (with pkgs; [
     google-chrome
     rquickshare

@@ -8,7 +8,6 @@
   environment.systemPackages = [ pkgs.pnpm ];
 
   homebrew.casks = [
-    "zen"
     "slack"
     "postman"
     "google-gemini"
