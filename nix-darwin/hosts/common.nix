@@ -128,6 +128,8 @@ in
       "jetbrains-toolbox"
       # Ice: menu bar manager
       "jordanbaird-ice"
+      # Logi Options+: Logitech mouse/keyboard customization
+      "logi-options+"
       # Morisawa Fonts: font sync app
       "morisawa-desktop-manager"
     ];
