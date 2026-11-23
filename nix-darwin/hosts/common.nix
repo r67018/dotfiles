@@ -15,6 +15,9 @@ in
     pkgs.docker-compose
     pkgs.colima
     pkgs.tmux
+    # scrcpy: Android screen mirroring/control; android-tools puts adb on PATH
+    pkgs.scrcpy
+    pkgs.android-tools
   ];
 
   fonts.packages = with pkgs; [
